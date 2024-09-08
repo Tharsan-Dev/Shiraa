@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+// import Cookies from 'js-cookie'; // Import the js-cookie library
 import './Login.css'; // Import the CSS file
 
 const Login = () => {
@@ -14,8 +15,9 @@ const Login = () => {
       const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, {
         email,
         password,
-      });
-      localStorage.setItem('token', res.data.token);
+      },{withCredentials:true});// front end cookie allowing
+      console.log(res.data);
+      localStorage.setItem('user', JSON.stringify(res.data));
       alert('Login successful');
       window.location.href = '/Login';
     } catch (err) {

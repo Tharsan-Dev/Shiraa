@@ -1,5 +1,6 @@
 // controllers/userRoles.js
 import itemModels from "../models/itemModels.js"
+import cloudinary from "../utils/cloudinary.js";
 // Function to get all items
 export const getItems = async (req, res) => {
     try {
@@ -27,9 +28,34 @@ export const getItems = async (req, res) => {
   
   // Function to create a new item
   export const createItem = async (req, res) => {
-    const { name, type, items } = req.body;
+    const { name, category, price, description,
+      quantity,
+      stock } = req.body;
+      const file=req.files;
+      console.log(file);
+
+      const uploader = async(path) => { 
+        const res=await cloudinary.uploader.upload(path);
+        console.log(res);
+        return res.secure_url
+      };
+      const urls = [];
+      const files = req.files;
+      for (const file of files) {
+        const { path } = file;
+        const newpath = await uploader(path);
+        console.log(newpath);
+        urls.push(newpath);
+        // fs.unlinkSync(path);
+      }
+    console.log(urls);
+
     try {
-      const item = new itemModels({ name, type, items });
+      const item = new itemModels({ name,category, price, description,
+        quantity,
+        stock,
+        imageUrls:urls });
+
       await item.save();
       res.status(200).json(item);
     } catch (err) {

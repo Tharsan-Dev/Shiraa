@@ -18,7 +18,12 @@ connectDB();
 const app = express();
 
 // Enable CORS
-app.use(cors());
+app.use(cors(
+    {
+        origin: `${process.env.FRONT_END_URL}`,
+        credentials: true
+    },
+));
 // Enable JSON parsing
 app.use (cookieParser());
 

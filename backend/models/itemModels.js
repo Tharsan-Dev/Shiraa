@@ -2,10 +2,13 @@ import { Schema, model } from 'mongoose';
 
 const itemSchema = new Schema({
   name: { type: String, required: true },
-  type: { type: String,  required: true },
-  items: [{ type: String,  }],
-  order: { type: Map, of: Number, default: {} },
-  date: { type: Date, default: Date.now },
+  category: { type: String,  required: true },
+  imageUrls:[{type: String}],
+  price: { type: Number, required: true },
+  description: { type: String,  },
+  quantity: { type: String, required: true },
+  userId: { type: Schema.Types.ObjectId, ref: 'User' },
+  stock:{type:Number}
 });
 
 export default model('itemModels', itemSchema);

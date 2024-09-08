@@ -20,8 +20,8 @@ function App() {
     };
 
     // Send the data to the backend API
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, newUser)
-      .then(response => {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, newUser,{withCredentials:true})
+      .then(_response => {
         alert('User registered successfully!');
         // Clear the form after success
         setName('');
