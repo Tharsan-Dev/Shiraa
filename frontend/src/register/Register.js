@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '/home/tharsan/Documents/finalproject-Shiraa/frontend/src/App.css'
+import './Register.css'
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
- 
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,6 +28,10 @@ function App() {
         setName('');
         setEmail('');
         setPassword('');
+
+        
+          navigate('/home'); // Redirect to home page for regular users
+        
       
       })
       .catch(error => {
