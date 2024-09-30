@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import shopsRoutes from "./routes/shopsRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
@@ -40,6 +41,9 @@ app.use('/api/users', userRoutes);
 
 
 app. use ('/api/products',productRoutes);
+
+app. use ('/api/shops',shopsRoutes);
+
 
 
 // Default route

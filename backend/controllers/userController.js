@@ -34,7 +34,7 @@ const login = async(req,res) => {
 const register = async(req,res) => {
 
     const {name ,password, email} = req.body;
-    //console.log(req.body)
+    console.log(req.body)
     
     const userExiists = await User.findOne ({email});
 
@@ -84,7 +84,7 @@ const getUserById = async(req,res) =>{
 
 
       res.status(200).json(user);
-
+      failed
     } else {   
        res.status(404).json({message: 'Users not found'});
   }
@@ -139,8 +139,68 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
+const updateUserRole = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { role } = req.body;
+
+    // Check if role is provided
+    if (!role) {
+      return res.status(400).json({ message: 'Role is required' });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the user's role
+    user.role = role;
+    await user.save();
+
+    // Optionally, return the updated user data
+    res.status(200).json({ message: 'Role updated successfully', user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+const deactivateUser = async (req, res) => {
+  try {
+    // Get the user ID from the URL params
+    const userId = req.params.id;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the user is already deactivated
+    if (user.isDeactivated) {
+      return res.status(400).json({ message: "User is already deactivated" });
+    }
+
+    // Set the user's status to deactivated
+    user.isDeactivated = true;
+
+    // Save the updated user
+    await user.save();
+
+    // Respond with the updated user data (or all users if you want to refresh the list)
+    res.status(200).json({ message: "User deactivated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 
 
-export {login,register,logOut,getUserById,getAllUsers,updateUserProfile};
+
+export {login,register,logOut,getUserById,getAllUsers,updateUserProfile,updateUserRole,deactivateUser};

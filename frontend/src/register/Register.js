@@ -30,7 +30,7 @@ function App() {
         setPassword('');
 
         
-          navigate('/home'); // Redirect to home page for regular users
+          navigate('/'); // Redirect to home page for regular users
         
       
       })

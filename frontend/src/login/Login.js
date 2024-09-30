@@ -26,12 +26,12 @@ const Login = () => {
 
       alert('Login successful');
 
-      window.location.href = '/Login';
+      // window.location.href = '/Login';
 
       if (userData.role === 'admin') {
-        navigate('/admin-dashboard'); // Redirect to admin dashboard
+        navigate('/admin'); // Redirect to admin dashboard
       } else {
-        navigate('/home'); // Redirect to home page for regular users
+        navigate('/'); // Redirect to home page for regular users
       }
     } catch (err) {
       setError('Invalid credentials');
@@ -39,7 +39,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    
+    <div className="login-container mx-auto">
       <h2>Login</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleLogin}>
@@ -60,6 +61,7 @@ const Login = () => {
         <button type="submit">Login</button>
       </form>
       <p> Don't have an account? </p><a href="/register">Register here</a>
+      
     </div>
   );
 };

@@ -8,6 +8,7 @@ const itemSchema = new Schema({
   description: { type: String,  },
   quantity: { type: String, required: true },
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
+  shopId: { type: Schema.Types.ObjectId, ref: 'shopModels' },
   stock:{type:Number}
 });
 

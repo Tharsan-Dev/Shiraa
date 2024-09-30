@@ -1,5 +1,5 @@
 // controllers/userRoles.js
-import itemModels from "../models/itemModels.js"
+import itemModels from "../models/itemModels.js";
 import cloudinary from "../utils/cloudinary.js";
 // Function to get all items
 export const getItems = async (req, res) => {
