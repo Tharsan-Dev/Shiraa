@@ -20,7 +20,7 @@ const Login = () => {
       },{withCredentials:true});// front end cookie allowing
       const userData = res.data;
 
-      console.log(res.data);
+      // console.log(res.data);
 
       localStorage.setItem('user', JSON.stringify(res.data));
 

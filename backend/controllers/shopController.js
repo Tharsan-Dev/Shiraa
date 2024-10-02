@@ -77,14 +77,14 @@ const ShopRegister = async (req, res) => {
             if (newpath) {
                 urls.push(newpath);  // Add Cloudinary URL to array
             }
-            // Optionally: fs.unlinkSync(path);  // Remove file from server after upload
         }
     }
+
     try {
         // Check if the user exists in the UserModel
         const user = await User.findById(req.user._id);  // Assuming req.user._id is populated by authentication middleware
-        //   console.log(user);
-          
+        console.log(user);
+        
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -95,41 +95,30 @@ const ShopRegister = async (req, res) => {
             imageUrls: urls,  // Store Cloudinary image URLs
             userId: req.user._id  // Associate shop with user ID
         });
+        console.log(shop,"shopdata");
+        
+
+        // Update the user's role to "shopOwner"
+        const updateUserRole = await User.updateOne(
+            { _id: req.user._id },  // Find the user by ID
+            { $set: { role: "shopOwner" } }  // Update the role to "shopOwner"
+        );
+        console.log(updateUserRole);
+        const updatedUser = await User.findById(req.user._id); 
+        
 
         if (shop) {
-            res.status(200).json(shop);
+            
+            res.json(updatedUser);
         } else {
-            res.status(400).json({ message: 'Shop creation failed' });
+            res.status(400).json({ message: 'Shop creation or role update failed' });
         }
     } catch (err) {
         console.error("Error creating shop", err);
         res.status(500).json({ message: 'Server error', error: err });
     }
-
-    // try {
-    //     // Check if the user already has a shop
-    //     const existingShop = await shopModel.findOne({ userId: req.user._id });
-    //     if (existingShop) {
-    //         return res.status(400).json({ message: 'User already owns a shop' });
-    //     }
-
-    //     // Create new shop
-    //     const shop = await shopModel.create({
-    //         name,
-    //         imageUrls: urls,  // Store Cloudinary image URLs
-    //         userId: req.user._id  // Associate shop with user ID
-    //     });
-
-    //     if (shop) {
-    //         res.status(200).json(shop);
-    //     } else {
-    //         res.status(400).json({ message: 'Shop creation failed' });
-    //     }
-    // } catch (err) {
-    //     console.error("Error creating shop", err);
-    //     res.status(500).json({ message: 'Server error', error: err });
-    // }
 };
+
 
 
 

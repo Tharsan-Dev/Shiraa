@@ -20,23 +20,28 @@ function App() {
      
     };
 
-    // Send the data to the backend API
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, newUser,{withCredentials:true})
-      .then(_response => {
-        alert('User registered successfully!');
-        // Clear the form after success
-        setName('');
-        setEmail('');
-        setPassword('');
-
-        
-          navigate('/'); // Redirect to home page for regular users
-        
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, newUser, { withCredentials: true })
+    .then(res => {
+      alert('User registered successfully!');
       
-      })
-      .catch(error => {
-        console.error('Error registering user:', error);
-      });
+      // Clear the form after success
+      setName('');
+      setEmail('');
+      setPassword('');
+      
+      const userData = res.data;
+      console.log(userData);
+  
+      // Save the user data in localStorage
+      localStorage.setItem('user', JSON.stringify(userData));
+  
+      // Redirect to home page for regular users
+      navigate('/'); 
+    })
+    .catch(err => {
+      console.error('Error registering user:', err);
+    });
+  
   };
 
   return (

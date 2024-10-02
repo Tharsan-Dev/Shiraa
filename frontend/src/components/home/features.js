@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Container, Button,  Card,  } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
 function Features() {
 
+  const [role, setRole] = useState(null); // Initialize as null for better type checking
+  
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setRole(user.role); // Set user role if available
+    }
+  }, []);
+  
   const navigate = useNavigate();
 
   const handleViewShop = () => {
@@ -23,7 +32,7 @@ function Features() {
                   <Card.Body>
                     <Card.Title>Shop {shop}</Card.Title>
                     <Card.Text>Specializing in unique local products</Card.Text>
-                    <Button variant="link" onClick={handleViewShop}>View Shop</Button>
+                    {role ? (<Button variant="link" onClick={handleViewShop}>View Shop</Button>):(null)}
                   </Card.Body>
                 </Card>
               </div>

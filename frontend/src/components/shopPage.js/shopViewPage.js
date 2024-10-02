@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 // import { ShoppingCart, Menu, Search, ChevronRight } from "react-icons/bs"; // Use Bootstrap Icons or similar
-
 export default function ShopHomePage() {
+
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        setRole(user.role); // Set user role if available
+    }
+}, []);
 
 
   const handleShopNowClick = () => {
@@ -49,7 +57,13 @@ export default function ShopHomePage() {
             <Col lg={6} className="mb-4 mb-lg-0">
               <h2 className="display-3 fw-bold" style={{ color: "black" }}>Discover Your Style with Shiraa</h2>
               <p className="lead">Elevate your wardrobe with our curated collection of trendy and comfortable clothing.</p>
-              <Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Shop Now</Button>
+              {role === 'customer'? (
+                <Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Shop Now</Button>) :(null) 
+                }
+              {
+                role === 'shopOwner'&& (<Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Add Product</Button>)
+              }
+              
             </Col>
             <Col lg={6}>
               <img src="/placeholder.svg" alt="Featured Product" className="img-fluid rounded shadow" />
