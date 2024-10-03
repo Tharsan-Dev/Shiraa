@@ -14,7 +14,7 @@ export default function ShopRegisterForm() {
     address: '',
     category: '',
     description: '',
-    images: []  // To handle image files
+    images: []  
   });
 
   const navigate = useNavigate();

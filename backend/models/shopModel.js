@@ -7,7 +7,7 @@ const shopSchema = new Schema({
   role: {
     type: String,
     required: false,
-    default:"shop"
+    default:"shopOwner"
   },
   description: { type: String,  },
  

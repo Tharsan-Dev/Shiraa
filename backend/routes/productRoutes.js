@@ -8,9 +8,9 @@ const router = express.Router();
 // Item-related routes with role-based access control
 router.get('/view', getItems); // Pass the role to check in checkRole
 router.get('/view/:id', getItemById);
-router.post('/create', protect,checkRole(['admin','shops']),upload.array("images", 2), createItem);
-router.put('/update/:id', protect,checkRole(['admin','shops']), updateItem);
-router.delete('/delete/:id', protect,checkRole(['admin','shops']), deleteItem);
+router.post('/create', protect,checkRole(['admin','shopOwner']),upload.array("images", 2), createItem);
+router.put('/update/:id', protect,checkRole(['admin','shopOwner']), updateItem);
+router.delete('/delete/:id', protect,checkRole(['admin','shopOwner']), deleteItem);
 
 
 
