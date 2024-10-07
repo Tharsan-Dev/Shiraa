@@ -2,56 +2,7 @@ import shopModel from "../models/shopModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "../utils/cloudinary.js";
 
-
-// const ShopRegister = async(req,res) => {
-
-//     const {name ,imageUrls} = req.body;
-//     console.log(req.body)
-
-//     const uploader = async(path) => { 
-//         const res=await cloudinary.uploader.upload(path);
-//         console.log(res);
-//         return res.secure_url
-//       };
-//       const urls = [];
-//       const files = req.files;
-//       for (const file of files) {
-//         const { path } = file;
-//         const newpath = await uploader(path);
-//         console.log(newpath);
-//         urls.push(newpath);
-//         // fs.unlinkSync(path);
-//       }
-//     console.log(urls);
-
-    
-
-    
-//     const userExiists = await User.findOne (req.user._id);
-
-//     if(userExiists){
-//         res.status(400)
-//         .json({message:'User already exists'});
-//         return;
-//     }
-
-//     const shop = await shopModel.create({name ,imageUrls:urls ,userId:req.user._id });
-//     if(shop){
-
-//         res.status(200).json(shop)
-//     }else{
-//         res.status(400)
-//         .json({message:'shop create failed'});
-//         return;
-//     }
-// }
-
-
-
-
-
-
-
+// Shop Registration Controller
 const ShopRegister = async (req, res) => {
     const { name } = req.body;
 
@@ -66,74 +17,95 @@ const ShopRegister = async (req, res) => {
         }
     };
 
-    // Array to store image URLs from Cloudinary
-    const urls = [];
-    const files = req.files;  // Assuming Multer is handling file uploads
+    try {
+        const urls = [];
+        const files = req.files;  // Assuming Multer is handling file uploads
 
-    if (files && files.length > 0) {
-        for (const file of files) {
-            const { path } = file;
-            const newpath = await uploader(path);
-            if (newpath) {
-                urls.push(newpath);  // Add Cloudinary URL to array
+        // Upload files to Cloudinary and store URLs
+        if (files && files.length > 0) {
+            for (const file of files) {
+                const { path } = file;
+                const newpath = await uploader(path);
+                if (newpath) {
+                    urls.push(newpath);  // Add Cloudinary URL to array
+                }
             }
         }
-    }
 
-    try {
-        // Check if the user exists in the UserModel
-        const user = await User.findById(req.user._id);  // Assuming req.user._id is populated by authentication middleware
-        console.log(user);
-        
+        // Check if the user exists
+        const user = await User.findById(req.user._id);  // req.user._id populated via authentication middleware
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Create new shop (after user verification)
+        // Check if user already owns a shop
+        const existingShop = await shopModel.findOne({ userId: req.user._id });
+        if (existingShop) {
+            return res.status(400).json({ message: 'User already owns a shop' });
+        }
+
+        // Create new shop
         const shop = await shopModel.create({
             name,
             imageUrls: urls,  // Store Cloudinary image URLs
             userId: req.user._id  // Associate shop with user ID
         });
-        console.log(shop,"shopdata");
-        
 
         // Update the user's role to "shopOwner"
-        const updateUserRole = await User.updateOne(
+        await User.updateOne(
             { _id: req.user._id },  // Find the user by ID
             { $set: { role: "shopOwner" } }  // Update the role to "shopOwner"
         );
-        console.log(updateUserRole);
-        const updatedUser = await User.findById(req.user._id); 
-        
 
-        if (shop) {
-            
-            res.json(updatedUser);
-        } else {
-            res.status(400).json({ message: 'Shop creation or role update failed' });
-        }
+        // Return updated user information
+        const updatedUser = await User.findById(req.user._id);
+
+        // Respond with the updated user and shop data
+        res.status(200).json({
+            message: 'Shop created successfully',
+            shop,
+            user: updatedUser
+        });
+
     } catch (err) {
         console.error("Error creating shop", err);
         res.status(500).json({ message: 'Server error', error: err });
     }
 };
 
-
-
-
-const getShops = async(req,res) => {
-
-
-    const shop = await shopModel.find();
-    if(shop){
-
-        res.status(200).json(shop)
-    }else{
-        res.status(400)
-        .json({message:'shops not found'});
-        return;
+// Get All Shops Controller
+const getShops = async (req, res) => {
+    try {
+        // Fetch all shops
+        const shops = await shopModel.find();
+        if (shops && shops.length > 0) {
+            res.status(200).json(shops);
+        } else {
+            res.status(404).json({ message: 'No shops found' });
+        }
+    } catch (err) {
+        console.error("Error fetching shops", err);
+        res.status(500).json({ message: 'Server error', error: err });
     }
-}
+};
 
-export {ShopRegister,getShops}
+// Get Shop by ID Controller (optional, in case you need it for individual shop pages)
+const getShopById = async (req, res) => {
+    try {
+        const { shopId } = req.params;
+
+        // Find shop by ID
+        const shop = await shopModel.findById(shopId);
+
+        if (!shop) {
+            return res.status(404).json({ message: 'Shop not found' });
+        }
+
+        res.status(200).json(shop);
+    } catch (err) {
+        console.error("Error fetching shop by ID", err);
+        res.status(500).json({ message: 'Server error', error: err });
+    }
+};
+
+export { ShopRegister, getShops, getShopById };

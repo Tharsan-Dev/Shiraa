@@ -164,6 +164,7 @@
 
 
 import itemModels from "../models/itemModels.js";
+import shopModel from "../models/shopModel.js";
 import cloudinary from "../utils/cloudinary.js";
 
 // Function to get all items
@@ -176,6 +177,19 @@ export const getItems = async (req, res) => {
         res.status(500).send('Server error');
     }
 };
+
+export const getShopsItems = async (req, res) => {
+    const shopId = req.params.id; // Extract shop ID from URL params
+ 
+    try {
+      const items = await itemModels.find({shop :shopId }); 
+      res.status(200).json(items);
+     
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  };
 
 // Function to get an item by ID
 export const getItemById = async (req, res) => {
@@ -225,8 +239,12 @@ export const createItem = async (req, res) => {
 
         if (user.role === 'shopOwner') {
             creatorRole = 'shopOwner';
-            shopId = user.shopId; // Assuming the shop ID is stored in the user object
+           const shop = await shopModel.find({userId : user._id }); // Assuming the shop ID is stored in the user object
+           console.log(shop);
+           
+           shopId= shop[0]._id
         }
+
 
         // Create the new product with the creator's role and shop ID if applicable
         const item = new itemModels({

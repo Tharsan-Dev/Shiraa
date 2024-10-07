@@ -65,6 +65,8 @@ import ShopRegisterForm from './shopregister/ShopRegister';
 import ShopListTable from './dashbord/Shops';
 import AddProduct from './dashbord/AddProduct';
 import ProductList from './dashbord/Products';
+import CartPage from './components/cart/CartPage';
+import OrderConfirmationPage from './components/order/order';
 
 
 
@@ -93,7 +95,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/shopview" element={< Shop/>} />
+          <Route path="/shopview/:shopId" element={< Shop/>} />
           <Route path="/ShopRegister" element={< ShopRegisterForm/>} />
+
+          <Route path="/cart" element={<CartPage/>}/>
+          <Route path="/order-confirmation" element={<OrderConfirmationPage/>} />
 
 
           {/* Nested routes under /admin */}

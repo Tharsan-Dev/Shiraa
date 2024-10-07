@@ -177,7 +177,9 @@ export const NavigationBar = () => {
     const handleLogOut = async () => {
         try {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/logoutuser`, {}, { withCredentials: true });
-            localStorage.removeItem('user'); // Remove user from local storage
+            localStorage.removeItem('user');
+            localStorage.removeItem('cart')
+            // Remove user from local storage
             alert('Logout successful');
             window.location.reload(true); // Reload the page to reflect the change
         } catch (err) {
