@@ -13,7 +13,7 @@ const login = async(req,res) => {
 
     const user = await User.findOne({ email });
   
-    if (user && (await user.matchPassword(password))) {
+    if (user && (await user.matchPassword(password))&& user.isActive) {
       generateToken(res, user._id);
 
       res.json({
@@ -24,7 +24,7 @@ const login = async(req,res) => {
       });
     } else {
       res.status(401)
-      .json({message:'Invalid email or password'});
+      .json({message:'Invalid email or password or user not in active'});
     }
   
 
@@ -172,28 +172,20 @@ const updateUserRole = async (req, res) => {
 
 const deactivateUser = async (req, res) => {
   try {
-    // Get the user ID from the URL params
     const userId = req.params.id;
-
-    // Find the user by ID
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if the user is already deactivated
-    if (user.isDeactivated) {
+    if (!user.isActive) {
       return res.status(400).json({ message: "User is already deactivated" });
     }
 
-    // Set the user's status to deactivated
-    user.isDeactivated = true;
-
-    // Save the updated user
+    user.isActive = false; // Deactivate the user
     await user.save();
 
-    // Respond with the updated user data (or all users if you want to refresh the list)
     res.status(200).json({ message: "User deactivated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -202,6 +194,37 @@ const deactivateUser = async (req, res) => {
 
 
 
+const activateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isActive) {
+      return res.status(400).json({ message: "User is already active" });
+    }
+
+    user.isActive = true; // Activate the user
+    await user.save();
+
+    res.status(200).json({ message: "User activated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
-export {login,register,logOut,getUserById,getAllUsers,updateUserProfile,updateUserRole,deactivateUser};
+
+
+export {login,
+        register,
+        logOut,
+        getUserById,
+        getAllUsers,
+        updateUserProfile,
+        updateUserRole,
+        deactivateUser,
+        activateUser}; // Export the functions to be used in other files

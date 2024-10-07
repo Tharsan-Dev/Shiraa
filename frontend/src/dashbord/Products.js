@@ -193,7 +193,7 @@ const ProductList = () => {
   return (
     <main>
       <Container>
-        <h1 className="text-center mb-4">Product List</h1>
+        {/* <h1 className="text-center mb-4">Product List</h1> */}
 
         {loading && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>

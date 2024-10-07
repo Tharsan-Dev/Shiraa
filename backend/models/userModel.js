@@ -21,6 +21,10 @@ const userSchema = mongoose.Schema(
       required: false,
       default:"customer"
     },
+    isActive: {
+      type: Boolean,
+      default: true, // By default, the user is active
+    },
   },
  
 );
