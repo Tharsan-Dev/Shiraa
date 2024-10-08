@@ -198,7 +198,7 @@ export const NavigationBar = () => {
                         {isMenuOpen ? <BsX /> : <BsList />}
                     </BootstrapNavbar.Toggle>
                     <BootstrapNavbar.Collapse>
-                        <Nav className="ms-auto text-white">
+                        <Nav className="ms-auto text-white ">
                             <Nav.Link href="/" className="text-white text-decoration-none">Home</Nav.Link> {/* Modified to navigate to "/" */}
                             {['Shops', 'Products', 'Packages', 'About Us', 'Contact'].map((item) => {
                                 const formattedItem = item.replace(/\s+/g, '-'); // Replace spaces with hyphens
@@ -212,25 +212,29 @@ export const NavigationBar = () => {
                                     </Nav.Link>
                                 );
                             })}
+                   <div className="d-flex justify-content-end align-items-center">
+  {/* Conditionally render the "OwnStore" button based on user's role */}
+  {role && (
+    <Button href="/ShopRegister" variant="primary" size="sm" className="mr-3">
+      OwnStore
+    </Button>
+  )}
+
+  {/* Conditionally render the login/logout button */}
+  {role ? (
+    <Button onClick={handleLogOut} variant="primary" size="sm" className="ml-3">
+      Logout
+    </Button>
+  ) : (
+    <Button href="/login" variant="primary" size="sm" className="ml-3">
+      Login
+    </Button>
+  )}
+</div>
+
                         </Nav>
 
-                        {/* Conditionally render the "OwnStore" button based on user's role */}
-                        {role && (
-                            <Button href="/ShopRegister" variant="primary" size="sm" style={{ marginLeft: '20px' }}>
-                                OwnStore
-                            </Button>
-                        )}
-
-                        {/* Conditionally render the login/logout button */}
-                        {role ? (
-                            <Button onClick={handleLogOut} variant="primary" size="sm">
-                                Logout
-                            </Button>
-                        ) : (
-                            <Button href="/login" variant="primary" size="sm">
-                                Login
-                            </Button>
-                        )}
+                        
                     </BootstrapNavbar.Collapse>
                 </Container>
             </BootstrapNavbar>

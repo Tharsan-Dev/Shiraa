@@ -5,16 +5,18 @@ import itemModels from '../models/itemModels.js';
 // Function to create a new order
 export const createOrder = async (req, res) => {
   const { shopId, products, deliveryAddress } = req.body;
+  console.log("order data",req.body);
+  
 
   try {
     // Fetch user from the request (assuming authentication middleware)
     const user = req.user;
 
     // Validate if the shop exists
-    const shop = await Shop.findById(shopId);
-    if (!shop) {
-      return res.status(404).json({ message: 'Shop not found' });
-    }
+    // const shop = await Shop.findById(shopId);
+    // if (!shop) {
+    //   return res.status(404).json({ message: 'Shop not found' });
+    // }
 
     // Validate products and calculate total price
     let totalAmount = 0;

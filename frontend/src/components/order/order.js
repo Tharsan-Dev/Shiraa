@@ -4,22 +4,28 @@ import { useNavigate } from 'react-router-dom';
 
 function OrderConfirmationPage() {
   const [cartItems, setCartItems] = useState([]);
-  const [user,SetUser] =useState({})
-  const [shippingAddress, setShippingAddress] = useState({ address: '', city: '',  });
-  const [shippingCost] = useState(500);
+  const [user, setUser] = useState({});
+  const [shippingAddress, setShippingAddress] = useState({ address: '', city: '' });
+  const [shippingCost] = useState(500);  // Fixed shipping cost
   const navigate = useNavigate();
+
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  };
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const user = JSON.parse(localStorage.getItem('user')) || [];
-    if(!user){
-        navigate('/login')
+    const user = JSON.parse(localStorage.getItem('user')) || {};
+    if (!user ) {
+      navigate('/login');  // Redirect to login if user is not logged in
     }
     setCartItems(cart);
-    SetUser(user)
-  }, []);
+    setUser(user);
+  }, [navigate]);
 
-  // Calculate total price of cart items
+  // Calculate the total price of cart items
   const getTotalPrice = () => {
     const itemTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     return itemTotal + shippingCost; // Add shipping cost to total
@@ -29,18 +35,37 @@ function OrderConfirmationPage() {
     setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
   };
 
-  const handleOrderSubmit = () => {
-    // Collect order data (cart items, shipping address, total amount)
+  const handleOrderSubmit = async () => {
     const orderData = {
       cartItems,
       shippingAddress,
       totalAmount: getTotalPrice(),
+      shippingCost,
+      shopId: cartItems[0]?.shopId, // Assuming each cart item has an associated shop ID
     };
 
-    console.log('Order Data:', orderData);
-    // Perform the order creation (backend integration here)
-    // After order confirmation, navigate to a success or order details page
-    navigate('/order-success'); // Placeholder for order success page
+    try {
+      const jwtToken = getCookie("jwt");
+      const response = await fetch('http://localhost:5000/api/orders/create', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Order created:', data);
+        navigate('/order-success');
+      } else {
+        console.error('Failed to create order');
+      }
+    } catch (err) {
+      console.error('Error creating order:', err);
+    }
   };
 
   return (
@@ -70,32 +95,11 @@ function OrderConfirmationPage() {
                 placeholder="Enter your city"
               />
             </Form.Group>
-            {/* <Form.Group className="mb-3" controlId="formPostalCode">
-              <Form.Label>Postal Code</Form.Label>
-              <Form.Control
-                type="text"
-                name="postalCode"
-                value={shippingAddress.postalCode}
-                onChange={handleInputChange}
-                placeholder="Enter postal code"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formCountry">
-              <Form.Label>Country</Form.Label>
-              <Form.Control
-                type="text"
-                name="country"
-                value={shippingAddress.country}
-                onChange={handleInputChange}
-                placeholder="Enter your country"
-              />
-            </Form.Group> */}
           </Form>
         </Col>
         <Col md={6}>
           <h5>Order Summary</h5>
-          <h6> name: -{" "}{user.name}</h6>
-          
+          <h6>Name: {user.name}</h6>
           <ul>
             {cartItems.map(item => (
               <li key={item._id}>
