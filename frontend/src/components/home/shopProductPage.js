@@ -26,9 +26,32 @@ function ShopProductPage() {
     }
   }, [id]);  // Add 'id' to the dependency array to refetch when it changes
 
+    // Add product to localStorage cart
+    const addToCart = (product) => {
+      const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      // Check if product is already in the cart
+      const productExists = cartItems.find((item) => item._id === product._id);
+      
+      if (productExists) {
+        // If product is already in the cart, increment the quantity
+        const updatedCart = cartItems.map((item) =>
+          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+      } else {
+        // If product is not in the cart, add it with quantity 1
+        const updatedCart = [...cartItems, { ...product, quantity: 1 }];
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+      }
+  
+      alert(`${product.name} added to cart!`);
+    };
+  
+
   return (
     <div>
-      <section className="py-5" id='Products'>
+     <section className="py-5" id='Products'>
         <Container>
           <h3 className="text-center mb-5">Featured Products</h3>
           <Row>
@@ -44,7 +67,13 @@ function ShopProductPage() {
                     <Card.Body>
                       <Card.Title>{product.name}</Card.Title>
                       <Card.Text>${product.price}</Card.Text>
-                      <Button variant="warning" className="w-100">Add to Cart</Button>
+                      <Button 
+                        variant="warning" 
+                        className="w-100" 
+                        onClick={() => addToCart(product)}
+                      >
+                        Add to Cart
+                      </Button>
                     </Card.Body>
                   </Card>
                 </Col>

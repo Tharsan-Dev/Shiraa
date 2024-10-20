@@ -200,6 +200,7 @@ export const NavigationBar = () => {
                     <BootstrapNavbar.Collapse>
                         <Nav className="ms-auto text-white ">
                             <Nav.Link href="/" className="text-white text-decoration-none">Home</Nav.Link> {/* Modified to navigate to "/" */}
+                            <Nav.Link href="/cart" className="text-white text-decoration-none">Cart</Nav.Link>
                             {['Shops', 'Products', 'Packages', 'About Us', 'Contact'].map((item) => {
                                 const formattedItem = item.replace(/\s+/g, '-'); // Replace spaces with hyphens
                                 return (

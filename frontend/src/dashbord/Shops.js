@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Form, Pagination, Alert, Container, Spinner } from 'react-bootstrap';
+import { Button, Table, Form, Pagination, Alert, Container, Spinner, InputGroup, FormControl } from 'react-bootstrap';
 import { Search, Edit, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ShopListTable = () => {
@@ -78,9 +78,11 @@ const ShopListTable = () => {
   return (
     <main>
       <Container>
+        <h1 className="text-center mb-4"></h1>
+        {/* shop list */}
         <div className="space mb-4"></div>
-        <h1 className="text-center mb-4">Shop List</h1>
-
+  
+        {/* Loading Spinner */}
         {loading && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
             <Spinner animation="border" role="status" variant="primary">
@@ -88,26 +90,24 @@ const ShopListTable = () => {
             </Spinner>
           </div>
         )}
-
+  
+        {/* Error Alert */}
         {error && <Alert variant="danger">{error}</Alert>}
-
-        <Form.Group className="mb-3" controlId="searchShops">
-          <Form.Label>Search shops by name or location</Form.Label>
-          <div className="d-flex">
-            <Form.Control
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="me-2"
-            />
-            <Button variant="outline-secondary">
-              <Search className="me-1" />
-              Search
-            </Button>
-          </div>
-        </Form.Group>
-
+  
+        {/* Search Input */}
+        <InputGroup className="mb-3">
+          <InputGroup.Text>Search shops </InputGroup.Text>
+          <FormControl
+            placeholder="Search shops"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {/* <Button variant="outline-secondary" onClick={handleSearch}>
+            Search
+          </Button> */}
+        </InputGroup>
+  
+        {/* Shops Table */}
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -132,45 +132,37 @@ const ShopListTable = () => {
                   </span>
                 </td>
                 <td>
-                  <div className="d-flex gap-2">
-                    <Button variant="primary" size="sm" onClick={() => handleEdit(shop._id)}>
-                      <Edit className="me-1" />
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" onClick={() => handleDeactivate(shop._id)}>
-                      <XCircle className="me-1" />
-                      Deactivate
-                    </Button>
-                  </div>
+                  <Button variant="outline-secondary" onClick={() => handleEdit(shop._id)}>
+                    Edit
+                  </Button>
+                  <Button variant="outline-danger" onClick={() => handleDeactivate(shop._id)} className="ms-2">
+                    Deactivate
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </Table>
-
-        <div className="d-flex justify-content-between align-items-center">
-          <p className="text-muted">
-            Showing {indexOfFirstShop + 1} to {Math.min(indexOfLastShop, filteredShops.length)} of {filteredShops.length} shops
-          </p>
-
-          <Pagination>
-            <Pagination.Prev
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft />
-            </Pagination.Prev>
-            <Pagination.Next
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight />
-            </Pagination.Next>
-          </Pagination>
+  
+        {/* Pagination */}
+        <div className="d-flex justify-content-between mt-4">
+          <Button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </Button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <Button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </Button>
         </div>
       </Container>
     </main>
   );
-};
+};  
 
 export default ShopListTable;

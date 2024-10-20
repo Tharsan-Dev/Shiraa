@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 // import { ShoppingCart, Menu, Search, ChevronRight } from "react-icons/bs"; // Use Bootstrap Icons or similar
 export default function ShopHomePage() {
 
@@ -61,7 +62,7 @@ export default function ShopHomePage() {
                 <Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Shop Now</Button>) :(null) 
                 }
               {
-                role === 'shopOwner'&& (<Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Add Product</Button>)
+                role === 'shopOwner'&& (<Link to ='/createproduct'><Button size="lg" variant="light" className="text-primary" >Add Product</Button></Link>)
               }
               
             </Col>

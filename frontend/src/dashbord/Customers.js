@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Container, Spinner, Alert, Badge, Button, Form, Modal } from "react-bootstrap";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-
+import {useNavigate} from "react-router-dom";
 const YourComponent = () => {
   const [data, setData] = useState([]); // Initialize data as an empty array
   const [loading, setLoading] = useState(true);
@@ -11,6 +11,7 @@ const YourComponent = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null); // For editing user data
   const [editedRole, setEditedRole] = useState(""); // Role edit
+  const navigate = useNavigate();
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -18,41 +19,50 @@ const YourComponent = () => {
     if (parts.length === 2) return parts.pop().split(";").shift();
   };
 
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const jwtToken = getCookie("jwt");
-        const response = await fetch("http://localhost:5000/api/users/allUsers", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${jwtToken}`,
-          },
-          credentials: "include", // Include cookies in the request
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+    const user = JSON.parse(localStorage.getItem('user'));
+    if  (!user || user.role !== "admin") {
+      navigate("/login"); 
+      
+    } else {
+      const fetchData = async () => {
+        try {
+          const jwtToken = getCookie("jwt");
+          const response = await fetch("http://localhost:5000/api/users/allUsers", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jwtToken}`,
+            },
+            credentials: "include", // Include cookies in the request
+          });
+  
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const result = await response.json();
+          
+          // Ensure result is an array before setting it to data
+          if (Array.isArray(result)) {
+            setData(result);
+          } else {
+            console.error("API did not return an array:", result); // Log for debugging
+            setData([]); // Set data to an empty array if result is not an array
+          }
+          
+          setLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setLoading(false);
         }
-
-        const result = await response.json();
-        
-        // Ensure result is an array before setting it to data
-        if (Array.isArray(result)) {
-          setData(result);
-        } else {
-          console.error("API did not return an array:", result); // Log for debugging
-          setData([]); // Set data to an empty array if result is not an array
-        }
-        
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+      };
+  
+      fetchData();
+      
+    }
+    
   }, [data]);
 
   // Role Update Handler

@@ -22,6 +22,8 @@ function OrderConfirmationPage() {
       navigate('/login');  // Redirect to login if user is not logged in
     }
     setCartItems(cart);
+    console.log("test one ",cartItems);
+    
     setUser(user);
   }, [navigate]);
 
@@ -41,7 +43,7 @@ function OrderConfirmationPage() {
       shippingAddress,
       totalAmount: getTotalPrice(),
       shippingCost,
-      shopId: cartItems[0]?.shopId, // Assuming each cart item has an associated shop ID
+       // Assuming each cart item has an associated shop ID
     };
 
     try {

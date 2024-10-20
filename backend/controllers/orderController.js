@@ -3,56 +3,66 @@ import Shop from '../models/shopModel.js';
 import itemModels from '../models/itemModels.js';
 
 // Function to create a new order
+// Create a new order
 export const createOrder = async (req, res) => {
-  const { shopId, products, deliveryAddress } = req.body;
-  console.log("order data",req.body);
+  const { cartItems, shippingAddress, totalAmount, shippingCost,} = req.body;
+  // console.log('Received shopId:', shopId);
+  console.log("test cart",cartItems);
   
 
   try {
-    // Fetch user from the request (assuming authentication middleware)
-    const user = req.user;
+    
 
-    // Validate if the shop exists
-    // const shop = await Shop.findById(shopId);
-    // if (!shop) {
-    //   return res.status(404).json({ message: 'Shop not found' });
-    // }
+    // Validate if the products exist and calculate total price
+    let calculatedTotal = 0;
+    const orderItems = await Promise.all(
+      cartItems.map(async (item) => {
+        const product = await itemModels.findById(item._id);
+        console.log("product sample",product);
+        
+        if (!product) {
+          throw new Error(`Product not found: ${item.name}`);
+        }
 
-    // Validate products and calculate total price
-    let totalAmount = 0;
-    const validatedProducts = [];
+        calculatedTotal += product.price * item.quantity;
+        return {
+          product: product._id,
+          name: product.name,
+          quantity: item.quantity,
+          price: product.price,
+          shop:product.shop
+        };
+      })
+    );
 
-    for (const item of products) {
-      const product = await itemModels.findById(item.productId);
-      if (!product) {
-        return res.status(404).json({ message: `Product with ID ${item.productId} not found` });
-      }
-      totalAmount += product.price * item.quantity;
-
-      validatedProducts.push({
-        productId: product._id,
-        name: product.name,
-        quantity: item.quantity,
-        price: product.price
-      });
+    // Compare calculated total with provided totalAmount
+    const orderTotal = calculatedTotal + shippingCost;
+    console.log(orderTotal);
+    
+    if (orderTotal !== totalAmount) {
+      return res.status(400).json({ message: 'Total amount mismatch' });
     }
 
-    // Create the order
+    // Create new order
     const order = new Order({
-      user: user._id,
-      shop: shop._id,
-      products: validatedProducts,
-      totalAmount,
-      deliveryAddress,
+      user: req.user._id, // Assuming req.user is set from authentication middleware
+      orderItems,
+      shippingAddress,
+      totalAmount: orderTotal,
+      shippingCost,
+      paymentStatus: 'pending',
+      orderStatus: 'pending',
     });
 
-    await order.save();
-    res.status(201).json({ message: 'Order created successfully', order });
+    const createdOrder = await order.save();
+
+    res.status(201).json(createdOrder);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error(err);
+    res.status(500).json({ message: 'Error creating order', error: err.message });
   }
 };
+
 
 // Function to fetch orders for a user
 export const getUserOrders = async (req, res) => {

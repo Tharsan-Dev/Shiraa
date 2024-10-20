@@ -143,7 +143,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { Table, Container, Spinner, Alert, InputGroup, FormControl, Button } from "react-bootstrap";
+import { Table, Container, Spinner, Alert, InputGroup, FormControl, Button, Modal, Form } from "react-bootstrap";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -151,7 +151,17 @@ const ProductList = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editedProduct, setEditedProduct] = useState({ name: '', category: '', price: '', quantity: '', status: '' });
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const productsPerPage = 5;
+
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -182,19 +192,69 @@ const ProductList = () => {
   const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  const handleEdit = (id) => {
-    console.log(`Edit product with id: ${id}`);
+  const handleEdit = (product) => {
+    setSelectedProduct(product);
+    setEditedProduct({ name: product.name, category: product.category, price: product.price, quantity: product.quantity, status: product.status });
+    setShowEditModal(true);
   };
 
-  const handleDelete = (id) => {
-    console.log(`Delete product with id: ${id}`);
+  const handleProductUpdate = async () => {
+    try {
+      const jwtToken = getCookie("jwt");
+  
+      const response = await fetch(`http://localhost:5000/api/products/update/${selectedProduct._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`, // Include the token in the Authorization header
+        },
+        credentials: "include",
+        body: JSON.stringify(editedProduct),
+      });
+  
+      if (response.ok) {
+        setShowEditModal(false);
+        // Update products in state with the updated product details
+        setProducts(prevProducts =>
+          prevProducts.map(product =>
+            product._id === selectedProduct._id ? { ...product, ...editedProduct } : product
+          )
+        );
+      } else {
+        console.error('Failed to update product', await response.json());
+      }
+    } catch (err) {
+      console.error("Failed to update product", err);
+    }
   };
-
+  
+  const handleDelete = async (id) => {
+    try {
+      const jwtToken = getCookie("jwt");
+      const response = await fetch(`http://localhost:5000/api/products/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`, // Add the token to the request header
+        },
+        credentials: "include",
+      });
+  
+      if (response.ok) {
+        console.log(`Product with id: ${id} deleted`);
+        // Remove the product from the state after successful deletion
+        setProducts(prevProducts => prevProducts.filter(product => product._id !== id));
+      } else {
+        console.error('Failed to delete product', await response.json());
+      }
+    } catch (err) {
+      console.error('Error while deleting product', err);
+    }
+  };
+  
   return (
     <main>
       <Container>
-        {/* <h1 className="text-center mb-4">Product List</h1> */}
-
         {loading && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
             <Spinner animation="border" role="status" variant="primary">
@@ -204,6 +264,7 @@ const ProductList = () => {
         )}
 
         {error && <Alert variant="danger">{error}</Alert>}
+        {showDeleteAlert && <Alert variant="danger">Product deleted successfully!</Alert>}
 
         <InputGroup className="mb-3">
           <InputGroup.Text>Search</InputGroup.Text>
@@ -238,7 +299,7 @@ const ProductList = () => {
                   </span>
                 </td>
                 <td>
-                  <Button variant="outline-secondary" onClick={() => handleEdit(product._id)}>
+                  <Button variant="outline-secondary" onClick={() => handleEdit(product)}>
                     Edit
                   </Button>
                   <Button variant="outline-danger" onClick={() => handleDelete(product._id)} className="ms-2">
@@ -265,6 +326,69 @@ const ProductList = () => {
             Next
           </Button>
         </div>
+
+        {/* Edit Modal */}
+        {selectedProduct && (
+          <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit Product</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group controlId="formName">
+                  <Form.Label>Product Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={editedProduct.name}
+                    onChange={(e) => setEditedProduct({ ...editedProduct, name: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formCategory">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={editedProduct.category}
+                    onChange={(e) => setEditedProduct({ ...editedProduct, category: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formPrice">
+                  <Form.Label>Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={editedProduct.price}
+                    onChange={(e) => setEditedProduct({ ...editedProduct, price: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formQuantity">
+                  <Form.Label>Quantity</Form.Label>
+                  <Form.Control
+                    type="number"
+                    value={editedProduct.quantity}
+                    onChange={(e) => setEditedProduct({ ...editedProduct, quantity: e.target.value })}
+                  />
+                </Form.Group>
+                <Form.Group controlId="formStatus">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select
+                    value={editedProduct.status}
+                    onChange={(e) => setEditedProduct({ ...editedProduct, status: e.target.value })}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </Form.Select>
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleProductUpdate}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
       </Container>
     </main>
   );

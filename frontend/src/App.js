@@ -67,6 +67,8 @@ import AddProduct from './dashbord/AddProduct';
 import ProductList from './dashbord/Products';
 import CartPage from './components/cart/CartPage';
 import OrderConfirmationPage from './components/order/order';
+import CreateProduct from './addProductPage/addproduct';
+
 
 
 
@@ -100,6 +102,7 @@ function App() {
 
           <Route path="/cart" element={<CartPage/>}/>
           <Route path="/order-confirmation" element={<OrderConfirmationPage/>} />
+          <Route path="/createproduct" element={<CreateProduct/>}/>
 
 
           {/* Nested routes under /admin */}

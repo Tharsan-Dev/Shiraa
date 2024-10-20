@@ -243,6 +243,8 @@ export const createItem = async (req, res) => {
            console.log(shop);
            
            shopId= shop[0]._id
+           console.log(shopId);
+           
         }
 
 
