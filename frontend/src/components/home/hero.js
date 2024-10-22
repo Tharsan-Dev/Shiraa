@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Button, Form } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import image from '../images/pexels-markus-winkler-1430818-4183756.jpg';
 
 export const Hero = (props) => {
 
@@ -22,12 +23,23 @@ export const Hero = (props) => {
     return (
         <>
             <section
+                // id="Home"
+                // className="text-white text-center p-5 d-flex align-items-center justify-content-center"
+                // style={{ background: 'linear-gradient(to right, #0d6efd, #198754)', height: "100vh" }}
                 id="Home"
                 className="text-white text-center p-5 d-flex align-items-center justify-content-center"
-                style={{ background: 'linear-gradient(to right, #0d6efd, #198754)', height: "100vh" }}
+                style={{
+                  backgroundImage: `url(${image})`,
+                  height: "100vh",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
+              
+              
             >
                 <Container className="text-center">
-                    <h1 className="display-4 fw-bold">One Click to Your Favorite Shops</h1>
+                    <h1 className="display-4 fw-bold" style={{ color: 'red' }}>One Click to Your Favorite Shops</h1>
                     <Form className="d-flex justify-content-center my-4">
                         <div className='d-flex flex-row justify-content-center'>
                             <Form.Control
