@@ -73,6 +73,7 @@ import CreateProduct from './addProductPage/addproduct';
 
 
 
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -103,6 +104,7 @@ function App() {
           <Route path="/cart" element={<CartPage/>}/>
           <Route path="/order-confirmation" element={<OrderConfirmationPage/>} />
           <Route path="/createproduct" element={<CreateProduct/>}/>
+          
 
 
           {/* Nested routes under /admin */}

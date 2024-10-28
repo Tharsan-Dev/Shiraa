@@ -18,32 +18,61 @@ function OrderConfirmationPage() {
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const user = JSON.parse(localStorage.getItem('user')) || {};
-    if (!user ) {
-      navigate('/login');  // Redirect to login if user is not logged in
+
+    if (!user.name) {
+      navigate('/login');
     }
     setCartItems(cart);
-    console.log("test one ",cartItems);
-    
     setUser(user);
   }, [navigate]);
 
-  // Calculate the total price of cart items
   const getTotalPrice = () => {
     const itemTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-    return itemTotal + shippingCost; // Add shipping cost to total
+    return itemTotal + shippingCost;
   };
 
   const handleInputChange = (e) => {
     setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
   };
 
+  const handlePayment = async (id) => {
+    try {
+      const jwtToken = getCookie("jwt");
+      const response = await fetch('http://localhost:5000/api/payments/create-payment-intent', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ user: user.name, total: getTotalPrice(), orderId: id }),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.url) {
+        window.location.href = data.url;  // Redirect to Stripe payment
+      } else {
+        console.error('Payment failed');
+        alert('Payment failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error during payment:', error);
+      alert('An error occurred during payment processing. Please try again later.');
+    }
+  };
+
   const handleOrderSubmit = async () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty. Please add items before confirming the order.");
+      return;
+    }
+
     const orderData = {
       cartItems,
       shippingAddress,
       totalAmount: getTotalPrice(),
       shippingCost,
-       // Assuming each cart item has an associated shop ID
+      user:user.name
     };
 
     try {
@@ -61,12 +90,14 @@ function OrderConfirmationPage() {
       if (response.ok) {
         const data = await response.json();
         console.log('Order created:', data);
-        navigate('/order-success');
+        await handlePayment(data._id);
       } else {
         console.error('Failed to create order');
+        alert('Failed to create order. Please try again.');
       }
     } catch (err) {
       console.error('Error creating order:', err);
+      alert('An error occurred while creating the order. Please try again later.');
     }
   };
 

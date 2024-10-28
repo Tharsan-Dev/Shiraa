@@ -6,6 +6,9 @@ const orderSchema = new Schema({
     ref: 'User',
     required: true  // Ensure that user is always provided
   },
+  userName:{
+    type:String
+  },
   
   orderItems: [
     {
@@ -43,6 +46,9 @@ const orderSchema = new Schema({
     enum: ['pending', 'paid'],
     default: 'pending',
     required: true  // Ensure that payment status is always set
+  },
+  paymentId: {
+    type: String,
   },
   orderStatus: {
     type: String,

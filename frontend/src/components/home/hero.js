@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Button, Form } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import image from '../images/pexels-markus-winkler-1430818-4183756.jpg';
+import image from '/home/uki-jaffna/Downloads/shiraa/Shiraa-main/frontend/src/components/images/pexels-goumbik-349609.jpg';
 
 export const Hero = (props) => {
 

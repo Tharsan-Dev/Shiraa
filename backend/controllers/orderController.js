@@ -5,7 +5,7 @@ import itemModels from '../models/itemModels.js';
 // Function to create a new order
 // Create a new order
 export const createOrder = async (req, res) => {
-  const { cartItems, shippingAddress, totalAmount, shippingCost,} = req.body;
+  const { cartItems, shippingAddress, totalAmount, shippingCost,user} = req.body;
   // console.log('Received shopId:', shopId);
   console.log("test cart",cartItems);
   
@@ -45,7 +45,8 @@ export const createOrder = async (req, res) => {
 
     // Create new order
     const order = new Order({
-      user: req.user._id, // Assuming req.user is set from authentication middleware
+      user: req.user._id,
+      userName:user, // Assuming req.user is set from authentication middleware
       orderItems,
       shippingAddress,
       totalAmount: orderTotal,
