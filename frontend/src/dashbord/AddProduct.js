@@ -11,10 +11,15 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  // const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setImages(e.target.files);
   };
+
+  // const user = JSON.parse(localStorage.getItem('user'));
+  // if  (!user || user.role !== "admin") {
+  //   navigate("/login"); 
 
   const submitHandler = async (e) => {
     e.preventDefault();

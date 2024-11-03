@@ -1,6 +1,7 @@
 import Order from '../models/orderModel.js';
 import Shop from '../models/shopModel.js';
 import itemModels from '../models/itemModels.js';
+import orderModel from '../models/orderModel.js';
 
 // Function to create a new order
 // Create a new order
@@ -69,7 +70,8 @@ export const createOrder = async (req, res) => {
 export const getUserOrders = async (req, res) => {
   try {
     const userOrders = await Order.find({ user: req.user._id })
-      .populate('shop')
+      // .populate('shop')
+      .populate('user') 
       .populate('products.productId');
     res.status(200).json(userOrders);
   } catch (err) {
@@ -86,6 +88,16 @@ export const getShopOrders = async (req, res) => {
       .populate('user')
       .populate('products.productId');
     res.status(200).json(shopOrders);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().populate('user shop'); // Assuming user and shop are populated references
+    res.status(200).json(orders);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

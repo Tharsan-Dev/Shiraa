@@ -68,9 +68,10 @@ import ProductList from './dashbord/Products';
 import CartPage from './components/cart/CartPage';
 import OrderConfirmationPage from './components/order/order';
 import CreateProduct from './addProductPage/addproduct';
-
-
-
+// import NavigationBar from '../src/components/home/navbar';
+import { NavigationBar } from './components/home/navbar';
+import Footer from './components/home/Footer';
+import OrdersTable from './dashbord/Orders';
 
 
 
@@ -93,6 +94,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
+        <NavigationBar/>
         <Routes>
           <Route path="/" element={<  HomePage />} />
           <Route path="/login" element={<Login />} />
@@ -116,12 +118,14 @@ function App() {
             <Route path="addproduct" element={<AddProduct />} />
             <Route path="shops" element={<ShopListTable />} />
             <Route path="list-product" element={< ProductList/>} />
+            <Route path='orders'element={<OrdersTable/>}/>
           </Route>
 
           {/* Redirect to login if no route matches */}
           {/* //404 */}
           {/* <Route path="*" element={<Navigate to="/login" />} /> */}
         </Routes>
+        <Footer/>
       </Router>
     </ThemeProvider>
   );

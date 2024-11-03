@@ -4,7 +4,7 @@ import {Container, Card, Button } from 'react-bootstrap';
 
 function Subscription() {
   return (
-    <div><section id="Packages" className="py-5">
+    <div style={{ backgroundColor: '#e2e8f0' }}><section id="Packages" className="py-5">
     <Container>
       <h2 className="text-center mb-4">Subscription Packages</h2>
       <div className="row">

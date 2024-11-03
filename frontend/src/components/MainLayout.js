@@ -263,7 +263,6 @@ import { Layout, Menu, theme } from "antd";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Outlet, useNavigate } from "react-router-dom";
-import image from "../../src/logo192.png"
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
@@ -276,6 +275,9 @@ const MainLayout = () => {
 
   return (
     <>
+      <div style={{ height: "77px", backgroundColor:"#082f49"}}>
+
+       </div>
       <Layout>
         <Sider
           breakpoint="lg"

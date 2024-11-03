@@ -27,7 +27,7 @@ export default function ShiraaLandingPage() {
       {/* Customer Testimonials */}
       <CustomerFeedbacks/>
       {/* Footer */}
-      <Footer/>
+      
 
     </div>
   );

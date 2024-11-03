@@ -1,37 +1,50 @@
 import { Schema, model } from 'mongoose';
 
 const orderSchema = new Schema({
-  user: { 
-    type: Schema.Types.ObjectId, 
+  user: {
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true  // Ensure that user is always provided
   },
-  userName:{
-    type:String
+  userName: {
+    type: String,
+    required: true  // Ensure that username is provided
   },
-  
   orderItems: [
     {
-
-      product: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Product', 
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
         required: true  // Ensure that product is always provided
       },
-      
-    shop: {
-      type: Schema.Types.ObjectId,
-      ref: 'Shop',
-      required: true  // Ensure that shop is always provided
-    },
-      name: { type: String, required: true },  // Ensure that product name is provided
-      quantity: { type: Number, required: true },  // Ensure that quantity is provided
-      price: { type: Number, required: true }  // Ensure that price is provided
+      shop: {
+        type: Schema.Types.ObjectId,
+        ref: 'Shop',
+        required: true  // Ensure that shop is always provided
+      },
+      name: { 
+        type: String, 
+        required: true  // Ensure that product name is provided
+      },
+      quantity: { 
+        type: Number, 
+        required: true  // Ensure that quantity is provided
+      },
+      price: { 
+        type: Number, 
+        required: true  // Ensure that price is provided
+      }
     }
   ],
   shippingAddress: {
-    address: { type: String, required: true },  // Ensure that address is provided
-    city: { type: String, required: true }  // Ensure that city is provided
+    address: { 
+      type: String, 
+      required: true  // Ensure that address is provided
+    },
+    city: { 
+      type: String, 
+      required: true  // Ensure that city is provided
+    }
   },
   totalAmount: { 
     type: Number, 
@@ -61,8 +74,6 @@ const orderSchema = new Schema({
     default: Date.now,
     required: true  // Ensure that the order date is always set
   },
-
-  // New fields
   createdBy: { 
     type: Schema.Types.ObjectId, 
     ref: 'User', 
@@ -74,5 +85,8 @@ const orderSchema = new Schema({
     // To distinguish between admin or shopOwner
   }
 });
+
+// Set strictPopulate to false for this schema
+orderSchema.set('strictPopulate', false);
 
 export default model('Order', orderSchema);

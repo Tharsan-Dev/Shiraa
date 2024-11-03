@@ -11,6 +11,7 @@ const shopSchema = new Schema({
   },
   description: { type: String,  },
  
+ 
 });
 
 export default model('shopModel', shopSchema);

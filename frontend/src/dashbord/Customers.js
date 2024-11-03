@@ -1,16 +1,20 @@
-
 import React, { useEffect, useState } from "react";
-import { Table, Container, Spinner, Alert, Badge, Button, Form, Modal } from "react-bootstrap";
+import { Table, Container, Spinner, Alert, InputGroup, FormControl, Badge, Button, Form, Modal } from "react-bootstrap";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const YourComponent = () => {
-  const [data, setData] = useState([]); // Initialize data as an empty array
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [role, setRole] = useState(""); // For role selection
+  const [role, setRole] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null); // For editing user data
-  const [editedRole, setEditedRole] = useState(""); // Role edit
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [editedRole, setEditedRole] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
   const getCookie = (name) => {
@@ -19,12 +23,10 @@ const YourComponent = () => {
     if (parts.length === 2) return parts.pop().split(";").shift();
   };
 
-
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if  (!user || user.role !== "admin") {
-      navigate("/login"); 
-      
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || user.role !== "admin") {
+      navigate("/login");
     } else {
       const fetchData = async () => {
         try {
@@ -35,78 +37,50 @@ const YourComponent = () => {
               "Content-Type": "application/json",
               Authorization: `Bearer ${jwtToken}`,
             },
-            credentials: "include", // Include cookies in the request
+            credentials: "include",
           });
-  
+
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-  
+
           const result = await response.json();
-          
-          // Ensure result is an array before setting it to data
           if (Array.isArray(result)) {
             setData(result);
+            setTotalPages(Math.ceil(result.length / 10)); // Set total pages for pagination
           } else {
-            console.error("API did not return an array:", result); // Log for debugging
-            setData([]); // Set data to an empty array if result is not an array
+            console.error("API did not return an array:", result);
+            setData([]);
           }
-          
+
           setLoading(false);
         } catch (error) {
           setError(error.message);
           setLoading(false);
         }
       };
-  
+
       fetchData();
-      
     }
-    
-  }, [data]);
+  }, []);
 
-  // Role Update Handler
-  const submitHandler = async (e, id) => {
-    e.preventDefault();
+  const filteredData = data.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    try {
-      const jwtToken = getCookie("jwt");
+  const paginatedData = filteredData.slice((currentPage - 1) * 10, currentPage * 10);
 
-      const response = await fetch(`http://localhost:5000/api/users/updateRole/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({ role }), // Sending selected role to update
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update role");
-      }
-
-      // Refresh data after updating the role
-      const result = await response.json();
-      if (Array.isArray(result)) {
-        setData(result); // Ensure result is an array before setting it to data
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  // Edit user function
   const handleEdit = (user) => {
     setSelectedUser(user);
-    setEditedRole(user.role); // Set the current role for editing
+    setEditedRole(user.role);
     setShowEditModal(true);
   };
 
   const handleSaveEdit = async () => {
     try {
       const jwtToken = getCookie("jwt");
-
       const response = await fetch(`http://localhost:5000/api/users/updateRole/${selectedUser._id}`, {
         method: "PUT",
         headers: {
@@ -114,29 +88,27 @@ const YourComponent = () => {
           Authorization: `Bearer ${jwtToken}`,
         },
         credentials: "include",
-        body: JSON.stringify({ role: editedRole }), // Update with edited role
+        body: JSON.stringify({ role: editedRole }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to update role");
       }
 
-      // Refresh data after updating
       const result = await response.json();
       if (Array.isArray(result)) {
-        setData(result); // Ensure result is an array before setting it to data
+        setData(result);
       }
-      setShowEditModal(false); // Close modal after saving
+      setShowEditModal(false);
+      // location.reload()
     } catch (error) {
       setError(error.message);
     }
   };
 
-  // Deactivate user function (backend logic required)
   const handleDeactivate = async (id) => {
     try {
       const jwtToken = getCookie("jwt");
-
       const response = await fetch(`http://localhost:5000/api/users/deactivateUser/${id}`, {
         method: "PUT",
         headers: {
@@ -150,19 +122,20 @@ const YourComponent = () => {
         throw new Error("Failed to deactivate user");
       }
 
-      // Refresh data after deactivating the user
       const result = await response.json();
       if (Array.isArray(result)) {
-        setData(result); // Ensure result is an array before setting it to data
+        setData(result);
       }
+      setShowDeleteAlert(true);
+      setTimeout(() => setShowDeleteAlert(false), 3000);
     } catch (error) {
       setError(error.message);
     }
   };
+
   const handleActivate = async (id) => {
     try {
       const jwtToken = getCookie("jwt");
-  
       const response = await fetch(`http://localhost:5000/api/users/activateUser/${id}`, {
         method: "PUT",
         headers: {
@@ -171,33 +144,23 @@ const YourComponent = () => {
         },
         credentials: "include",
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to activate user");
       }
-  
-      // Assuming backend sends updated user data or user list
+
       const result = await response.json();
-      
       if (Array.isArray(result)) {
-        setData(result); // Update the UI with the new user data
-      } else {
-        console.warn("Unexpected response format: ", result);
+        setData(result);
       }
-      
     } catch (error) {
-      console.error("Error activating user: ", error.message);
-      setError(error.message); // Set the error state for displaying the error in the UI
+      setError(error.message);
     }
   };
-  
 
   return (
     <main>
-      <Container className="">
-        <div className="space"></div>
-
-        {/* Loading Spinner */}
+      <Container>
         {loading && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
             <Spinner animation="border" role="status" variant="primary">
@@ -206,13 +169,21 @@ const YourComponent = () => {
           </div>
         )}
 
-        {/* Error Message */}
         {error && <Alert variant="danger">{error}</Alert>}
+        {showDeleteAlert && <Alert variant="success">User deactivated successfully!</Alert>}
 
-        {/* User Table */}
+        <InputGroup className="mb-3">
+          <InputGroup.Text>Search</InputGroup.Text>
+          <FormControl
+            placeholder="Search users by name or role"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </InputGroup>
+
         {!loading && !error && (
-          <Table striped bordered hover responsive className="table-sm table-dark">
-            <thead className="text-white">
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
               <tr>
                 <th>ID</th>
                 <th>Name</th>
@@ -222,7 +193,7 @@ const YourComponent = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((user) => (
+              {paginatedData.map((user) => (
                 <tr key={user._id} className="align-middle">
                   <td>{user._id}</td>
                   <td className="fw-bold">{user.name}</td>
@@ -231,34 +202,20 @@ const YourComponent = () => {
                       {user.email}
                     </a>
                   </td>
-                  {/* <td>
-                    {user.role === "admin" ? (
-                      <Badge pill bg="success" className="d-flex align-items-center">
-                        <FaCheckCircle className="me-2" />
-                        Admin
-                      </Badge>
-                    ) : (
-                      <Badge pill bg="danger" className="d-flex align-items-center">
-                        <FaTimesCircle className="me-2" />
-                        Not Admin
-                      </Badge>
-                    )}
-                  </td> */}
                   <td>
-                    {user.role}
+                    <Badge bg={user.role === "admin" ? "success" : "danger"}>{user.role}</Badge>
                   </td>
                   <td>
-                    <Button variant="primary" size="sm" onClick={() => handleEdit(user)}>
+                    <Button variant="outline-secondary" onClick={() => handleEdit(user)}>
                       Edit
                     </Button>{" "}
-                    <Button 
-                      variant={user.isActive ? "danger" : "success"} 
-                      size="sm" 
-                      onClick={() => user.isActive ? handleDeactivate(user._id) : handleActivate(user._id)}
+                    <Button
+                      variant={user.isActive ? "outline-danger" : "outline-success"}
+                      onClick={() => (user.isActive ? handleDeactivate(user._id) : handleActivate(user._id))}
+                      className="ms-2"
                     >
                       {user.isActive ? "Deactivate" : "Activate"}
                     </Button>
-
                   </td>
                 </tr>
               ))}
@@ -266,7 +223,16 @@ const YourComponent = () => {
           </Table>
         )}
 
-        {/* Edit Modal */}
+        <div className="d-flex justify-content-between mt-4">
+          <Button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+            Previous
+          </Button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <Button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+            Next
+          </Button>
+        </div>
+
         <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Edit User Role</Modal.Title>
@@ -282,7 +248,7 @@ const YourComponent = () => {
                 >
                   <option value="admin">Admin</option>
                   <option value="customer">Customer</option>
-                  <option value="shopOwner">shopOwner</option>
+                  <option value="shopOwner">Shop Owner</option>
                 </Form.Control>
               </Form.Group>
             </Form>

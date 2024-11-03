@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -42,7 +43,7 @@ function ProductPage() {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#e2e8f0' }}>
       <section className="py-5" id='Products'>
         <Container>
           <h3 className="text-center mb-5">Featured Products</h3>
@@ -50,7 +51,38 @@ function ProductPage() {
             {products.length > 0 ? (
               products.map((product) => (
                 <Col sm={6} lg={3} key={product._id} className="mb-4">
-                  <Card className="h-100">
+                   <Card className="my-5 p-2 " style={{ border:"",background:" #C6CDFF"}} >
+      <Link to={`/product/${product._id}`} >
+        <Card.Img src={product.imageUrls[0]}  variant="top" style={{ height:"288px"}} />
+      </Link>
+
+      <Card.Body style={{ color:"white" }}>
+        <Link to={`/product/${product._id}`} style={{ textDecoration:"none", color:"black", fontSize:"20px"}}>
+          <Card.Title as="div" >
+            <strong>{product.name}</strong>
+          </Card.Title>
+        </Link>
+        {/* <Card.Text as="div">
+          <Rating
+            value={product.rating}
+            text={`${product.requirement} reviews`}
+          />
+        </Card.Text> */}
+         {/* <Card.Text>
+                      {product.description || 'Specializing in unique local products'}
+                    </Card.Text> */}
+                      <Card.Text as="h4">rs{product.price}</Card.Text>
+  <Button 
+                        variant="warning" 
+                        className="w-100" 
+                        onClick={() => addToCart(product)}
+                      >
+                        Add to Cart
+                      </Button>
+      
+      </Card.Body>
+    </Card>
+                  {/* <Card className="h-100">
                     <Card.Img 
                       variant="top" 
                       src={product.imageUrls[0]} // Assuming the first image URL is used
@@ -67,7 +99,7 @@ function ProductPage() {
                         Add to Cart
                       </Button>
                     </Card.Body>
-                  </Card>
+                  </Card> */}
                 </Col>
               ))
             ) : (

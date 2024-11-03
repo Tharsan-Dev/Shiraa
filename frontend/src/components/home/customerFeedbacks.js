@@ -16,9 +16,9 @@ function CustomerFeedbacks() {
 
 
   return (
-    <div>
-      
-        <section id="About-Us" className="py-5 bg-light">
+    <div style={{ backgroundColor: '#e2e8f0' }}>
+        <section id="About-Us" className="py-5 " >
+         
         <Container>
           <h2 className="text-center mb-4">What Our Customers Say</h2>
           <Carousel
