@@ -190,7 +190,7 @@ function Features() {
     <section id='Shops' className="bg-light">
       <div style={{ backgroundColor: '#e2e8f0' }}>
         <Container>
-          <h2 className="text-center mb-4 fw-bold" >Discover our <span className=''style={{ color: '#01e281' }}>Shops</span></h2>
+          <h2 className="text-center mb-4 fw-bold " >Discover our <span className=''style={{ color: '#01e281' }}>Shops</span></h2>
           <div className="row">
             {shops.length > 0 ? (
               shops.map((shop) => (

@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 export default function ShopRegisterForm() {
   const [formData, setFormData] = useState({
@@ -14,7 +13,7 @@ export default function ShopRegisterForm() {
     address: '',
     category: '',
     description: '',
-    images: []  
+    images: []
   });
 
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ export default function ShopRegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const data = new FormData();
     data.append('name', formData.shopName);
     data.append('ownerName', formData.ownerName);
@@ -44,7 +43,6 @@ export default function ShopRegisterForm() {
     data.append('category', formData.category);
     data.append('description', formData.description);
 
-    // Append each image file
     for (let i = 0; i < formData.images.length; i++) {
       data.append('images', formData.images[i]);
     }
@@ -54,18 +52,14 @@ export default function ShopRegisterForm() {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        withCredentials: true,  // Send cookies along with request
+        withCredentials: true,
       });
-      console.log(response.data);
-      
 
       if (response.data) {
-        console.log(response.data,"data");
         localStorage.removeItem('user');
         localStorage.setItem('user', JSON.stringify(response.data));
         alert('Shop registered successfully!');
         navigate('/shopview');
-      
       }
     } catch (err) {
       console.error('Error submitting the form:', err);
@@ -74,26 +68,48 @@ export default function ShopRegisterForm() {
   };
 
   return (
-    <Container className="mt-5">
+    <Container
+      style={{
+        maxWidth: '500px',
+        marginTop: '100px',
+        marginBottom: '10px',
+        backgroundColor: '#94a3b8',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+        border: '2px solid #334155',
+      }}
+    >
+      <h2
+        className="text-center mb-4"
+        style={{
+          color: '#334155',
+          fontWeight: 'bold',
+        }}
+      >
+        Register Your Shop
+      </h2>
       <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col>
+        <Row className="mb-3">
+          <Col md={6}>
             <Form.Group controlId="shopName">
-              <Form.Label>Shop Name</Form.Label>
+              <Form.Label style={{ color: '#334155' }}>Shop Name</Form.Label>
               <Form.Control
                 type="text"
                 name="shopName"
+                placeholder="Enter shop name"
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
           </Col>
-          <Col>
+          <Col md={6}>
             <Form.Group controlId="ownerName">
-              <Form.Label>Owner Name</Form.Label>
+              <Form.Label style={{ color: '#334155' }}>Owner Name</Form.Label>
               <Form.Control
                 type="text"
                 name="ownerName"
+                placeholder="Enter owner name"
                 onChange={handleInputChange}
                 required
               />
@@ -101,25 +117,26 @@ export default function ShopRegisterForm() {
           </Col>
         </Row>
 
-        {/* Additional fields */}
-        <Row>
-          <Col>
+        <Row className="mb-3">
+          <Col md={6}>
             <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
+              <Form.Label style={{ color: '#334155' }}>Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
+                placeholder="Enter email"
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
           </Col>
-          <Col>
+          <Col md={6}>
             <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
+              <Form.Label style={{ color: '#334155' }}>Password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
+                placeholder="Enter password"
                 onChange={handleInputChange}
                 required
               />
@@ -127,20 +144,21 @@ export default function ShopRegisterForm() {
           </Col>
         </Row>
 
-        <Form.Group controlId="phoneNumber">
-          <Form.Label>Phone Number</Form.Label>
+        <Form.Group controlId="phoneNumber" className="mb-3">
+          <Form.Label style={{ color: '#334155' }}>Phone Number</Form.Label>
           <Form.Control
             type="tel"
             name="phoneNumber"
+            placeholder="Enter phone number"
             onChange={handleInputChange}
             required
           />
         </Form.Group>
 
-        <Form.Group controlId="category">
-          <Form.Label>Category</Form.Label>
+        <Form.Group controlId="category" className="mb-3">
+          <Form.Label style={{ color: '#334155' }}>Category</Form.Label>
           <Form.Control as="select" name="category" onChange={handleInputChange} required>
-            <option>Select category</option>
+            <option value="">Select category</option>
             <option value="clothing">Clothing</option>
             <option value="electronics">Electronics</option>
             <option value="food">Food & Beverage</option>
@@ -149,18 +167,31 @@ export default function ShopRegisterForm() {
           </Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="address">
-          <Form.Label>Address</Form.Label>
-          <Form.Control as="textarea" name="address" onChange={handleInputChange} required />
+        <Form.Group controlId="address" className="mb-3">
+          <Form.Label style={{ color: '#334155' }}>Address</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="address"
+            placeholder="Enter address"
+            rows={2}
+            onChange={handleInputChange}
+            required
+          />
         </Form.Group>
 
-        <Form.Group controlId="description">
-          <Form.Label>Shop Description</Form.Label>
-          <Form.Control as="textarea" name="description" onChange={handleInputChange} />
+        <Form.Group controlId="description" className="mb-3">
+          <Form.Label style={{ color: '#334155' }}>Shop Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="description"
+            placeholder="Enter description"
+            rows={3}
+            onChange={handleInputChange}
+          />
         </Form.Group>
 
-        <Form.Group controlId="images">
-          <Form.Label>Upload Images</Form.Label>
+        <Form.Group controlId="images" className="mb-3">
+          <Form.Label style={{ color: '#334155' }}>Upload Images</Form.Label>
           <Form.Control
             type="file"
             name="images"
@@ -169,12 +200,21 @@ export default function ShopRegisterForm() {
           />
         </Form.Group>
 
-        <Button type="submit" className="mt-3">Register Shop</Button>
+        <Button
+          variant="primary"
+          type="submit"
+          className="w-100 mt-3"
+          style={{
+            backgroundColor: '#334155',
+            borderColor: '#334155',
+          }}
+        >
+          Register Shop
+        </Button>
       </Form>
     </Container>
   );
 }
-
 
 
 // import React, { useState } from 'react';

@@ -17,20 +17,20 @@
 //     const handleLogOut =  async () =>{
 //         try {
 //             const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/logoutuser`, {},{withCredentials:true});// front end cookie delecting
-            
-      
+
+
 //             localStorage.removeItem('user');
-      
+
 //             alert('Logout successful');
-      
+
 //            window.location.reload(true)
-      
-           
+
+
 //           } catch (err) {
-            
+
 //           }
-        
-        
+
+
 //     }
 
 //     return (
@@ -235,7 +235,7 @@
 
 //                         </Nav>
 
-                        
+
 //                     </BootstrapNavbar.Collapse>
 //                 </Container>
 //             </BootstrapNavbar>
@@ -245,19 +245,25 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Navbar, Nav, Button, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Button, Container, NavDropdown, Modal } from 'react-bootstrap';
 import { AiOutlineHome, AiOutlineInfoCircle, AiOutlineMail, AiOutlineUser, AiOutlineLogout } from 'react-icons/ai';
 import { FaCog } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import ShopRegisterForm from '../../shopregister/ShopRegister.js';
 
 export const NavigationBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [navbarBackground, setNavbarBackground] = useState('transparent');
     const [userProfile, setUserProfile] = useState(null);
     const location = useLocation();
-        const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [role, setRole] = useState(null); // Initialize as null for better type checking
+
+    const [showModal, setShowModal] = useState(false);
+
+    const handleOpenModal = () => setShowModal(true);
+    const handleCloseModal = () => setShowModal(false);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -268,19 +274,19 @@ export const NavigationBar = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-          if (window.scrollY > 50) {
-            setNavbarBackground('#082f49');
-          } else {
-            setNavbarBackground('transparent');
-          }
+            if (window.scrollY > 50) {
+                setNavbarBackground('#082f49');
+            } else {
+                setNavbarBackground('transparent');
+            }
         };
-    
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-      }, []);
+    }, []);
 
-      
-    
+
+
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -353,102 +359,117 @@ export const NavigationBar = () => {
         //     </Container>
         // </Navbar>
 
-        
-          <Navbar
-              collapseOnSelect
-              expand="lg"
-            //   style={{ background: navbarBackground }}
-               style={{ background: "#082f49" }}
-              className="rounded mx-5 fixed-top"
-          >
-              <Container>
-                  <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
-                      <img
-                          src="https://res.cloudinary.com/ddctt6pye/image/upload/v1727009374/Minimalist_Simple_Fast_Delivery_Logo_3_ecxlsk.png"
-                          alt="Shiraa Logo"
-                          height="40"
-                          style={{ marginRight: '8px' }}
-                      />
-                  </Navbar.Brand>
-                  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                  <Navbar.Collapse id="responsive-navbar-nav">
-                      <Nav className="ms-auto">
-                          <Nav.Link
-                              href="/"
-                              style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                              onMouseOver={(e) => (e.target.style.color = '#01e281')}
-                              onMouseOut={(e) => (e.target.style.color = 'white')}
-                          >
-                              Home
-                          </Nav.Link>
-                          <Nav.Link
-                              href="/cart"
-                              style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                              onMouseOver={(e) => (e.target.style.color = '#01e281')}
-                              onMouseOut={(e) => (e.target.style.color = 'white')}
-                          >
-                              Cart
-                          </Nav.Link>
-                          <Nav.Link
-                              href="/#Shops"
-                              style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                              onMouseOver={(e) => (e.target.style.color = '#01e281')}
-                              onMouseOut={(e) => (e.target.style.color = 'white')}
-                          >
-                              Shops
-                          </Nav.Link>
-                          
-                          <Nav.Link
-                              href="/#Products"
-                              style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                              onMouseOver={(e) => (e.target.style.color = '#01e281')}
-                              onMouseOut={(e) => (e.target.style.color = 'white')}
-                          >
-                              Products
-                          </Nav.Link>
-                          <Nav.Link
-                              href="/#Packages"
-                              style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                              onMouseOver={(e) => (e.target.style.color = '#01e281')}
-                              onMouseOut={(e) => (e.target.style.color = 'white')}
-                          >
-                              Products
-                          </Nav.Link>
-                          {[ 'About Us'].map((item) => {
-                              const formattedItem = item.replace(/\s+/g, '-');
-                              return (
-                                  <Nav.Link
-                                      href={`#${formattedItem}`}
-                                      key={item}
-                                      style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                                      onMouseOver={(e) => (e.target.style.color = '#4ade80')}
-                                      onMouseOut={(e) => (e.target.style.color = 'white')}
-                                  >
-                                      {item}
-                                  </Nav.Link>
-                              );
-                          })}
-                          {role && (
-                              <Nav.Link href="/ShopRegister" className="text-decoration-none">
-                                  <Button size="sm" style={{ color: 'white',background:'#01e281',fontWeight: 'bold' }}>OwnStore</Button>
-                              </Nav.Link>
-                          )}
-                          {role ? (
-                              <Nav.Link>
-                                  <Button onClick={handleLogOut} size="sm" className="ml-3 h-5" style={{ color: 'white',background:'#01e281',fontWeight: 'bold' }}>
-                                      Logout
-                                  </Button>
-                              </Nav.Link>
-                          ) : (
-                              <Nav.Link href="/login" className="text-decoration-none">
-                                  <Button size="sm" variant="success" style={{ color: 'white',background:'#01e281',fontWeight: 'bold' }}>
-                                      Login
-                                  </Button>
-                              </Nav.Link>
-                          )}
-                      </Nav>
-                  </Navbar.Collapse>
-              </Container>
-          </Navbar>
-      );
-  };
+        <>
+            <Navbar
+                collapseOnSelect
+                expand="lg"
+                //   style={{ background: navbarBackground }}
+                style={{ background: "#082f49" }}
+                className="rounded mx-5 fixed-top"
+            >
+                <Container>
+                    <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
+                        <img
+                            src="https://res.cloudinary.com/ddctt6pye/image/upload/v1727009374/Minimalist_Simple_Fast_Delivery_Logo_3_ecxlsk.png"
+                            alt="Shiraa Logo"
+                            height="40"
+                            style={{ marginRight: '8px' }}
+                        />
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="ms-auto">
+                            <Nav.Link
+                                href="/"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                Home
+                            </Nav.Link>
+                            <Nav.Link
+                                href="/cart"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                Cart
+                            </Nav.Link>
+                            <Nav.Link
+                                href="/#Shops"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                Shops
+                            </Nav.Link>
+
+                            <Nav.Link
+                                href="/#Products"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                Products
+                            </Nav.Link>
+                            <Nav.Link
+                                href="/#Packages"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                Packages
+                            </Nav.Link>
+                            {['About Us'].map((item) => {
+                                const formattedItem = item.replace(/\s+/g, '-');
+                                return (
+                                    <Nav.Link
+                                        href={`#${formattedItem}`}
+                                        key={item}
+                                        style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                        onMouseOver={(e) => (e.target.style.color = '#4ade80')}
+                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                                    >
+                                        {item}
+                                    </Nav.Link>
+                                );
+                            })}
+                            {role && (
+                                <Nav.Link href='/ShopRegister' className="text-decoration-none">
+                                    <Button size="sm" style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}>OwnStore</Button>
+                                </Nav.Link>
+                            )}
+                            {role ? (
+                                <Nav.Link>
+                                    <Button onClick={handleLogOut} size="sm" className="ml-3 h-5" style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}>
+                                        Logout
+                                    </Button>
+                                </Nav.Link>
+                            ) : (
+                                <Nav.Link href="/login" className="text-decoration-none">
+                                    <Button size="sm" variant="success" style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}>
+                                        Login
+                                    </Button>
+                                </Nav.Link>
+                            )}
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+
+            {/* Modal for Shop Register Form */}
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Register Your Shop</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Test Content</p>
+
+                   <div><ShopRegisterForm /></div>  {/* Display the separate ShopRegisterForm component here */}
+
+                </Modal.Body>
+            </Modal>
+        </>
+    );
+
+};

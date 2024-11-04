@@ -11,6 +11,8 @@ import ProductPage from '../components/home/productPage';
 
 export default function ShiraaLandingPage() {
 
+  
+
 
   return (
     <div>
@@ -23,10 +25,11 @@ export default function ShiraaLandingPage() {
 
       < ProductPage/>
       {/* Subscription Packages */}
-      <Subscription/>
+      {/* <Subscription/> */}
       {/* Customer Testimonials */}
       <CustomerFeedbacks/>
       {/* Footer */}
+
       
 
     </div>

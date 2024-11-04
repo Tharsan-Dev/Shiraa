@@ -46,8 +46,8 @@ function ProductPage() {
     <div style={{ backgroundColor: '#e2e8f0' }}>
       <section className="py-5" id='Products'>
         <Container>
-          <h3 className="text-center mb-5">Featured Products</h3>
-          <Row>
+        <h2 className="text-center mb-5 fw-bold" >Best Seller  <span className=''style={{ color: '#01e281' }}>Products</span></h2>
+        <Row>
             {products.length > 0 ? (
               products.map((product) => (
                 <Col sm={6} lg={3} key={product._id} className="mb-4">

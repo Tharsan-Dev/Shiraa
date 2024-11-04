@@ -11,15 +11,10 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  // const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setImages(e.target.files);
   };
-
-  // const user = JSON.parse(localStorage.getItem('user'));
-  // if  (!user || user.role !== "admin") {
-  //   navigate("/login"); 
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -28,19 +23,18 @@ const AddProduct = () => {
     setSuccess(null);
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('category', category);
-    formData.append('price', price);
-    formData.append('quantity', quantity);
-    formData.append('stock', stock);
+    formData.append("name", name);
+    formData.append("category", category);
+    formData.append("price", price);
+    formData.append("quantity", quantity);
+    formData.append("stock", stock);
 
-    // Append multiple images
     for (let i = 0; i < images.length; i++) {
-      formData.append('images', images[i]);
+      formData.append("images", images[i]);
     }
 
     try {
-      const jwtToken = getCookie("jwt"); // Retrieve JWT from the cookie
+      const jwtToken = getCookie("jwt");
       const response = await fetch("http://localhost:5000/api/products/create", {
         method: "POST",
         headers: {
@@ -70,12 +64,19 @@ const AddProduct = () => {
     if (parts.length === 2) return parts.pop().split(";").shift();
   };
 
-
   return (
-    <main>
-      <Container>
-        <div className="space mb-4"></div>
-        <h1 className="text-center mb-4">Add New Product</h1>
+    <main style={{ backgroundColor: "#f8f9fa", padding: "3rem", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <Container style={{
+        backgroundColor: "#ffffff",
+        borderRadius: "8px",
+        marginTop: '80px',
+        marginBottom: '5px',
+        padding: "2rem",
+        maxWidth: "500px",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        border: `2px solid #334155`,
+      }}>
+        <h1 className="text-center mb-4" style={{ color: "#334155", fontWeight: "bold" }}>Add New Product</h1>
 
         {loading && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>
@@ -85,70 +86,87 @@ const AddProduct = () => {
           </div>
         )}
 
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+        {error && <Alert variant="danger" style={{ textAlign: "center" }}>{error}</Alert>}
+        {success && <Alert variant="success" style={{ textAlign: "center" }}>{success}</Alert>}
 
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={submitHandler} style={{ marginTop: "20px" }}>
           <FormGroup controlId="name">
-            <FormLabel>Name</FormLabel>
+            <FormLabel style={{ fontWeight: "bold", color: "#334155" }}>Name</FormLabel>
             <FormControl
               type="text"
               placeholder="Enter product name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              style={{ border: "1px solid #334155" }}
             />
           </FormGroup>
 
           <FormGroup controlId="category">
-            <FormLabel>Category</FormLabel>
+            <FormLabel style={{ fontWeight: "bold", color: "#334155" }}>Category</FormLabel>
             <FormControl
               type="text"
               placeholder="Enter product category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
+              style={{ border: "1px solid #334155" }}
             />
           </FormGroup>
 
           <FormGroup controlId="price">
-            <FormLabel>Price</FormLabel>
+            <FormLabel style={{ fontWeight: "bold", color: "#334155" }}>Price</FormLabel>
             <FormControl
               type="number"
               placeholder="Enter product price"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
+              style={{ border: "1px solid #334155" }}
             />
           </FormGroup>
 
           <FormGroup controlId="quantity">
-            <FormLabel>Quantity</FormLabel>
+            <FormLabel style={{ fontWeight: "bold", color: "#334155" }}>Quantity</FormLabel>
             <FormControl
               type="text"
               placeholder="Enter product quantity"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
+              style={{ border: "1px solid #334155" }}
             />
           </FormGroup>
 
           <FormGroup controlId="stock">
-            <FormLabel>Stock</FormLabel>
+            <FormLabel style={{ fontWeight: "bold", color: "#334155" }}>Stock</FormLabel>
             <FormControl
               type="number"
               placeholder="Enter stock amount"
               value={stock}
               onChange={(e) => setStock(e.target.value)}
+              style={{ border: "1px solid #334155" }}
             />
           </FormGroup>
 
           <FormGroup controlId="images">
-            <FormLabel>Images</FormLabel>
+            <FormLabel style={{ fontWeight: "bold", color: "#334155" }}>Images</FormLabel>
             <FormControl
               type="file"
               multiple
               onChange={handleFileChange}
+              style={{ border: "1px solid #334155", padding: "5px" }}
             />
           </FormGroup>
 
-          <Button type="submit" variant="primary" className="mt-3">
+          <Button
+            type="submit"
+            variant="primary"
+            className="mt-3"
+            style={{
+              backgroundColor: "#334155",
+              borderColor: "#334155",
+              width: "100%",
+              padding: "10px",
+              fontWeight: "bold"
+            }}
+          >
             Add Product
           </Button>
         </Form>
