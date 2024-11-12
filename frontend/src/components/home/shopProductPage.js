@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion'; // Import motion
 
 function ShopProductPage() {
   const [products, setProducts] = useState([]);
   const  id  = useParams(); 
-  console.log(id);
+  console.log('msg @',id);
   
 
 
@@ -51,31 +52,63 @@ function ShopProductPage() {
 
   return (
     <div>
-     <section className="py-5" id='Products'>
+     <section className="py-5" id='Products' style={{ backgroundColor: '' }}>
         <Container>
-          <h3 className="text-center mb-5">Featured Products</h3>
+          <h3 className="text-center mb-3 fw-bold"><span style={{ color: '#082f49' }}>Products</span></h3>
           <Row>
             {products.length > 0 ? (
               products.map((product) => (
                 <Col sm={6} lg={3} key={product._id} className="mb-4">
-                  <Card className="h-100">
-                    <Card.Img 
+                  <motion.div
+                    whileHover={{ scale: 1.1 }} // Scale the button on hover
+                    transition={{ type: 'spring', stiffness: 50 }}
+                    >
+                 <Card className="my-5 p-2" style={{ border: "none", }}>
+                    <Link >
+                      <Card.Img 
+                      src={product.imageUrls[0]} 
                       variant="top" 
-                      src={product.imageUrls[0]} // Assuming the first image URL is used
-                      alt={product.name} 
-                    />
-                    <Card.Body>
-                      <Card.Title>{product.name}</Card.Title>
-                      <Card.Text>${product.price}</Card.Text>
-                      <Button 
-                        variant="warning" 
-                        className="w-100" 
-                        onClick={() => addToCart(product)}
-                      >
-                        Add to Cart
-                      </Button>
+                      style={{height:'280px', width:'290px'}}
+                       />
+                    </Link>
+
+                    <Card.Body style={{ color: "white" }}>
+                      <Link  style={{ textDecoration: "none", color: "#777", fontSize: "20px" }}>
+                        <Card.Title as="div">
+                          <strong>{product.name}</strong>
+                        </Card.Title>
+                      </Link>
+                      <Card.Text as="h5" className='fw-bold' style={{ textDecoration: "none", color: "black"}}>Rs {product.price}</Card.Text>
+                      {/* <motion.div
+                        whileHover={{ scale: 1.1 }} // Scale the button on hover
+                        transition={{ type: 'spring', stiffness: 300 }}
+                      > */}
+                        <Button
+                          variant="warning"
+                          className="w-90"
+                          onClick={() => addToCart(product)}
+                          style={{
+                            color: 'white',
+                            background: '#082f49',
+                            fontWeight: 'bold',
+                            border: "none",
+                            textDecoration: 'none'
+                          }}
+                          onMouseOver={(e) => {
+                            e.target.style.backgroundColor = '#01e281';
+                            e.target.style.color = '#082f49';
+                          }}
+                          onMouseOut={(e) => {
+                            e.target.style.backgroundColor = '#082f49';
+                            e.target.style.color = 'white';
+                          }}
+                        >
+                          Add to Cart
+                        </Button>
+                      {/* </motion.div> */}
                     </Card.Body>
                   </Card>
+                  </motion.div>
                 </Col>
               ))
             ) : (

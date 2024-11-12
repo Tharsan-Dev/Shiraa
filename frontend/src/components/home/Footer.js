@@ -9,10 +9,10 @@ function Footer() {
           <div className="row">
             <div className="col-md-3">
               <h5 className='fw-bold' style={{color:"#01e281"}}>About Shiraa</h5>
-              <p className="text-black">Connecting local shops with the community, one click at a time.</p>
+              <p className="text-white">Connecting local shops with the community, one click at a time.</p>
               </div>
             <div className="col-md-3">
-              <h5 className='fw=bold'style={{color:"#01e281"}}>Quick Links</h5>
+              <h5 className='fw-bold'style={{color:"#01e281"}}>Quick Links</h5>
               <ul className="list-unstyled ">
                 {[
                   { label: 'Home', href: '#home' },
@@ -41,13 +41,18 @@ function Footer() {
               </div>
             </div>
             <div className="col-md-3">
-              <h5>Newsletter</h5>
+              <h5 className='fw-bold' style={{color:"#01e281"}}>Newsletter</h5>
               <Form>
                 <div className="d-flex">
                   <Form.Control type="email" placeholder="Your email" />
-                  {/* <Button variant="primary" className="ms-2">
+                  <Button 
+                     style={{ color: 'white', background: '#01e281', fontWeight: 'bold',border:'none' }}
+                     onMouseOver={(e) => (e.target.style.color = '#082f49')}
+                     onMouseOut={(e) => (e.target.style.color = 'white')}
+
+                  className="ms-2">
                 Subscribe
-              </Button> */}
+              </Button>
                 </div>
               </Form>
             </div>

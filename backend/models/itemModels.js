@@ -1,16 +1,17 @@
-
 import { Schema, model } from 'mongoose';
 
 const itemSchema = new Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
-  category: { type: String,  required: true },
+  category: { type: String, required: true },
   description: { type: String },
   quantity: { type: String, required: true },
   stock: { type: Number, required: true },
   imageUrls: [{ type: String }],
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
-  shopId: { type: Schema.Types.ObjectId, ref: 'shopModels' },
+  
+  // Single shop reference
+  shopId: { type: Schema.Types.ObjectId, ref: 'Shop' },
 
   // New fields
   createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // To store who created the product
@@ -19,4 +20,3 @@ const itemSchema = new Schema({
 });
 
 export default model('itemModels', itemSchema);
-

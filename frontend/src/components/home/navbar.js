@@ -244,122 +244,83 @@
 // };
 
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Button, Container, NavDropdown, Modal } from 'react-bootstrap';
-import { AiOutlineHome, AiOutlineInfoCircle, AiOutlineMail, AiOutlineUser, AiOutlineLogout } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlineInfoCircle, AiOutlineMail, AiOutlineUser, AiOutlineLogout, AiOutlineShoppingCart } from 'react-icons/ai';
 import { FaCog } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import ShopRegisterForm from '../../shopregister/ShopRegister.js';
+import ShopRegisterForm from './ShopRegister';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const NavigationBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [navbarBackground, setNavbarBackground] = useState('transparent');
     const [userProfile, setUserProfile] = useState(null);
-    const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [role, setRole] = useState(null); // Initialize as null for better type checking
-
+    const [role, setRole] = useState(null);
     const [showModal, setShowModal] = useState(false);
+
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const handleOpenModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    const handleLogoClick = () => {
+        navigate(role === 'admin' ? '/admin/customer' : '/');
+    };
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-            setRole(user.role); // Set user role if available
+            setRole(user.role);
+            setIsLoggedIn(true);
+            setUserProfile(user.profilePicture);
         }
     }, []);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setNavbarBackground('#082f49');
-            } else {
-                setNavbarBackground('transparent');
-            }
+            setNavbarBackground(window.scrollY > 50 ? '#082f49' : 'transparent');
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-
-
-
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            setIsLoggedIn(true);
-            setUserProfile(user.profilePicture);
-        }
-    }, []);
-
     const handleLogOut = async () => {
         try {
             await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/logoutuser`, {}, { withCredentials: true });
             localStorage.removeItem('user');
-            alert('Logout successful');
-            window.location.reload(true);
+
+            // Display the logout notification
+            toast.error('Logout successful', {
+                onClose: () => {
+                    // Delay before reloading the page to allow the notification to show
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 1000); // Adjust the delay as needed (in milliseconds)
+                },
+            });
         } catch (err) {
             console.error(err);
         }
     };
 
     return (
-        // <Navbar expand="lg" style={{ backgroundColor: '#ffffff' }} fixed="top" className="shadow-sm">
-        //     <Container>
-        //         <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
-        //             <img src="https://res.cloudinary.com/ddctt6pye/image/upload/v1727009374/Minimalist_Simple_Fast_Delivery_Logo_3_ecxlsk.png" alt="Shiraa Logo" height="40" style={{ marginRight: '8px' }} />
-        //         </Navbar.Brand>
-        //         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        //         <Navbar.Collapse id="basic-navbar-nav">
-        //             <Nav className="mx-auto">
-        //                 <Nav.Link as={Link} to="/" style={{ color: '#6c63ff' }} className="d-flex align-items-center">
-        //                     <AiOutlineHome className="me-2" /> Home
-        //                 </Nav.Link>
-        //                 <Nav.Link as={Link} to="/about" style={{ color: '#6c63ff' }} className="d-flex align-items-center">
-        //                     <AiOutlineInfoCircle className="me-2" /> About
-        //                 </Nav.Link>
-        //                 <Nav.Link as={Link} to="/contact" style={{ color: '#6c63ff' }} className="d-flex align-items-center">
-        //                     <AiOutlineMail className="me-2" /> Contact
-        //                 </Nav.Link>
-        //             </Nav>
-        //             <Nav className="ms-auto d-flex align-items-center">
-        //                 {(location.pathname === '/' || location.pathname === '/learnmore') ? (
-        //                     <Button variant="outline-primary" style={{ borderColor: '#6c63ff', color: '#6c63ff' }} className="me-2">
-        //                         <FaCog className="me-2" /> SETUP
-        //                     </Button>
-        //                 ) : isLoggedIn ? (
-        //                     <>
-        //                         {userProfile && (
-        //                             <img
-        //                                 src={userProfile}
-        //                                 alt="Profile"
-        //                                 height="40"
-        //                                 width="40"
-        //                                 className="rounded-circle me-2 cursor-pointer"
-        //                             />
-        //                         )}
-        //                         <Button variant="primary" className="me-2" onClick={() => console.log('Navigate to profile')}>
-        //                             <AiOutlineUser className="me-2" /> Profile
-        //                         </Button>
-        //                         <Button variant="danger" onClick={handleLogOut}>
-        //                             <AiOutlineLogout className="me-2" /> Logout
-        //                         </Button>
-        //                     </>
-        //                 ) : (
-        //                     <Button variant="outline-primary" style={{ borderColor: '#6c63ff', color: '#6c63ff' }} className="me-2">
-        //                         <FaCog className="me-2" /> SETUP
-        //                     </Button>
-        //                 )}
-        //             </Nav>
-        //         </Navbar.Collapse>
-        //     </Container>
-        // </Navbar>
 
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+            />
             <Navbar
                 collapseOnSelect
                 expand="lg"
@@ -368,13 +329,20 @@ export const NavigationBar = () => {
                 className="rounded mx-5 fixed-top"
             >
                 <Container>
-                    <Navbar.Brand as={Link} to="/" style={{ display: 'flex', alignItems: 'center' }}>
+                    <Navbar.Brand as={Link} to="/" style={{
+                        display:'flex',
+                        width: '80px',
+                        height: '40px',
+                    }}
+                        onClick={handleLogoClick}>
                         <img
-                            src="https://res.cloudinary.com/ddctt6pye/image/upload/v1727009374/Minimalist_Simple_Fast_Delivery_Logo_3_ecxlsk.png"
+                            src="https://res.cloudinary.com/ddctt6pye/image/upload/v1731245261/nxbjgbl4xh6twrjxbwt6.svg"
                             alt="Shiraa Logo"
-                            height="40"
-                            style={{ marginRight: '8px' }}
-                        />
+                            width= '120px'
+                            height= '120px'
+                            
+
+                        style={{marginTop:'-45px',marginLeft:'-10px'}}/>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -387,14 +355,7 @@ export const NavigationBar = () => {
                             >
                                 Home
                             </Nav.Link>
-                            <Nav.Link
-                                href="/cart"
-                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
-                                onMouseOut={(e) => (e.target.style.color = 'white')}
-                            >
-                                Cart
-                            </Nav.Link>
+
                             <Nav.Link
                                 href="/#Shops"
                                 style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
@@ -412,42 +373,68 @@ export const NavigationBar = () => {
                             >
                                 Products
                             </Nav.Link>
-                            <Nav.Link
+                            {/* <Nav.Link
                                 href="/#Packages"
                                 style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
                                 onMouseOver={(e) => (e.target.style.color = '#01e281')}
                                 onMouseOut={(e) => (e.target.style.color = 'white')}
                             >
                                 Packages
+                            </Nav.Link> */}
+                            <Nav.Link
+                                href="/#About-Us"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#4ade80')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                About us
                             </Nav.Link>
-                            {['About Us'].map((item) => {
-                                const formattedItem = item.replace(/\s+/g, '-');
-                                return (
-                                    <Nav.Link
-                                        href={`#${formattedItem}`}
-                                        key={item}
-                                        style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
-                                        onMouseOver={(e) => (e.target.style.color = '#4ade80')}
-                                        onMouseOut={(e) => (e.target.style.color = 'white')}
-                                    >
-                                        {item}
-                                    </Nav.Link>
-                                );
-                            })}
+                            <Nav.Link
+                                href="/cart"
+                                style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold' }}
+                                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                                onMouseOut={(e) => (e.target.style.color = 'white')}
+                            >
+                                <AiOutlineShoppingCart style={{ fontSize: '25px' }} />
+                            </Nav.Link>
+
+
                             {role && (
-                                <Nav.Link href='/ShopRegister' className="text-decoration-none">
-                                    <Button size="sm" style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}>OwnStore</Button>
+                                <Nav.Link onClick={handleOpenModal} className="text-decoration-none text-muted">
+                                    <Button size="sm"
+                                        style={{
+                                            color: 'white',
+                                            background: '#01e281',
+                                            fontWeight: 'bold',
+                                            border: 'none'
+                                        }}
+                                        onMouseOver={(e) => (e.target.style.color = '#082f49')}
+                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                                    >OwnStore
+                                    </Button>
                                 </Nav.Link>
                             )}
                             {role ? (
                                 <Nav.Link>
-                                    <Button onClick={handleLogOut} size="sm" className="ml-3 h-5" style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}>
+                                    <Button onClick={handleLogOut}
+                                        size="sm"
+                                        className="ml-3 h-5"
+                                        style={{ color: 'white', background: '#01e281', fontWeight: 'bold', border: 'none' }}
+                                        onMouseOver={(e) => (e.target.style.color = '#082f49')}
+                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+
+                                    >
                                         Logout
                                     </Button>
                                 </Nav.Link>
                             ) : (
                                 <Nav.Link href="/login" className="text-decoration-none">
-                                    <Button size="sm" variant="success" style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}>
+                                    <Button size="sm"
+                                        variant="success"
+                                        style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}
+                                        onMouseOver={(e) => (e.target.style.color = '#082f49')}
+                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                                    >
                                         Login
                                     </Button>
                                 </Nav.Link>
@@ -460,13 +447,10 @@ export const NavigationBar = () => {
             {/* Modal for Shop Register Form */}
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Register Your Shop</Modal.Title>
+
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Test Content</p>
-
-                   <div><ShopRegisterForm /></div>  {/* Display the separate ShopRegisterForm component here */}
-
+                    <div><ShopRegisterForm /></div>  {/* Display the separate ShopRegisterForm component here */}
                 </Modal.Body>
             </Modal>
         </>

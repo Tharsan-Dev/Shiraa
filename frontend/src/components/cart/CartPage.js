@@ -65,12 +65,12 @@ function CartPage() {
   const [role, setRole] = useState(null); // Initialize as null for better type checking
   const navigate = useNavigate()
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            setRole(user.role); // Set user role if available
-        }
-    }, []);
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setRole(user.role); // Set user role if available
+    }
+  }, []);
 
   // Fetch cart items from localStorage
   useEffect(() => {
@@ -115,8 +115,8 @@ function CartPage() {
   // Decrement the quantity of a product
   const decrementQuantity = (productId) => {
     const updatedCart = cartItems.map(item =>
-      item._id === productId && item.quantity > 1 
-        ? { ...item, quantity: item.quantity - 1 } 
+      item._id === productId && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
         : item
     );
     setCartItems(updatedCart);
@@ -127,32 +127,36 @@ function CartPage() {
     <div>
       <section className="py-5" id='Cart'>
         <Container>
-          <h3 className="text-center mb-5">Your Cart</h3>
+          <h2 className="text-center mt-3 fw-bold">Your <span style={{ color: '#01e281' }}>Cart</span></h2>
+
           <Row>
             {cartItems.length > 0 ? (
               cartItems.map((product) => (
                 <Col sm={6} lg={3} key={product._id} className="mb-4">
                   <Card className="h-100">
-                    <Card.Img 
-                      variant="top" 
+                    <Card.Img
+                      variant="top"
+                      style={{ height: '225px', width: '305px' }}
                       src={product.imageUrls[0]} // Assuming the first image URL is used
-                      alt={product.name} 
+                      alt={product.name}
                     />
                     <Card.Body>
-                      <Card.Title>{product.name}</Card.Title>
-                      <Card.Text>Price: ${product.price}</Card.Text>
+                      <Card.Title className='text-muted'>{product.name}</Card.Title>
+                      <Card.Text className='fw-bold'>Price: ${product.price}</Card.Text>
                       <Card.Text>
-                        Quantity: 
+                        Quantity:
                         <ButtonGroup className="ml-2">
-                          <Button variant="outline-primary" onClick={() => decrementQuantity(product._id)}>-</Button>
+                          <Button variant="outline-danger" onClick={() => decrementQuantity(product._id)}>-</Button>
                           <Button variant="outline-secondary" disabled>{product.quantity}</Button>
                           <Button variant="outline-primary" onClick={() => incrementQuantity(product._id)}>+</Button>
                         </ButtonGroup>
                       </Card.Text>
-                      <Card.Text>Total: ${product.price * product.quantity}</Card.Text>
-                      <Button 
-                        variant="danger" 
-                        className="w-100" 
+                      <Card.Text className='fw-bold'>Total: ${product.price * product.quantity}</Card.Text>
+                      <Button
+                        style={{ background: "#082f49" }}
+                        onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                        className="w-100"
                         onClick={() => removeFromCart(product._id)}
                       >
                         Remove from Cart
@@ -166,9 +170,20 @@ function CartPage() {
             )}
           </Row>
           {cartItems.length > 0 && (
-            <div className="text-center mt-4">
+            <div className="text-center">
               <h4>Total Price: ${getTotalPrice()}</h4>
-              <Button variant="success"onClick={handleOrderCreate}>Proceed to Checkout</Button>
+              <Button
+              style={{backgroundColor:'#01e281'}}
+                className='fw-bold'
+                onMouseOver={(e) => {
+                  e.target.style.backgroundColor = '#082f49';
+                  e.target.style.color = '#01e281';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.backgroundColor = '#01e281';
+                  e.target.style.color = '#082f49';
+                }}
+                onClick={handleOrderCreate}>Proceed to Checkout</Button>
             </div>
           )}
         </Container>

@@ -61,7 +61,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Customers from './dashbord/Customers';
 import HomePage from './homePage/home';
 import Shop from '../src/shopPage/shop'
-import ShopRegisterForm from './shopregister/ShopRegister';
+import ShopRegisterForm from './components/home/ShopRegister';
 import ShopListTable from './dashbord/Shops';
 import AddProduct from './dashbord/AddProduct';
 import ProductList from './dashbord/Products';
@@ -72,6 +72,7 @@ import CreateProduct from './addProductPage/addproduct';
 import { NavigationBar } from './components/home/navbar';
 import Footer from './components/home/Footer';
 import OrdersTable from './dashbord/Orders';
+import AllProductPage from './components/home/allProductPage';
 
 
 
@@ -106,6 +107,9 @@ function App() {
           <Route path="/cart" element={<CartPage/>}/>
           <Route path="/order-confirmation" element={<OrderConfirmationPage/>} />
           <Route path="/createproduct" element={<CreateProduct/>}/>
+          <Route path="/all-products" element={<AllProductPage/>}/>
+          
+
           
 
 

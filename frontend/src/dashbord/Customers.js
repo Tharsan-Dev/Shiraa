@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { Table, Container, Spinner, Alert, InputGroup, FormControl, Badge, Button, Form, Modal } from "react-bootstrap";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {
+  Table,
+  Container,
+  Spinner,
+  Alert,
+  InputGroup,
+  FormControl,
+  Badge,
+  Button,
+  Form,
+  Modal,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+
+const RoleBadge = ({ role }) => {
+  const badgeStyle = {
+    admin: { backgroundColor: '#28a745', color: 'white' },
+    customer: { backgroundColor: '#007bff', color: 'white' },
+    shopOwner: { backgroundColor: '#ffc107', color: 'black' },
+
+  };
+  return <Badge style={badgeStyle[role] || badgeStyle.default}>{role}</Badge>;
+};
 
 const YourComponent = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [role, setRole] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [editedRole, setEditedRole] = useState("");
@@ -40,29 +59,25 @@ const YourComponent = () => {
             credentials: "include",
           });
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
+          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
           const result = await response.json();
           if (Array.isArray(result)) {
             setData(result);
-            setTotalPages(Math.ceil(result.length / 10)); // Set total pages for pagination
+            setTotalPages(Math.ceil(result.length / 10));
           } else {
             console.error("API did not return an array:", result);
             setData([]);
           }
-
           setLoading(false);
         } catch (error) {
           setError(error.message);
           setLoading(false);
         }
       };
-
       fetchData();
     }
-  }, []);
+  }, [data]);
 
   const filteredData = data.filter(
     (user) =>
@@ -91,16 +106,11 @@ const YourComponent = () => {
         body: JSON.stringify({ role: editedRole }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update role");
-      }
+      if (!response.ok) throw new Error("Failed to update role");
 
       const result = await response.json();
-      if (Array.isArray(result)) {
-        setData(result);
-      }
+      if (Array.isArray(result)) setData(result);
       setShowEditModal(false);
-      // location.reload()
     } catch (error) {
       setError(error.message);
     }
@@ -118,14 +128,10 @@ const YourComponent = () => {
         credentials: "include",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to deactivate user");
-      }
+      if (!response.ok) throw new Error("Failed to deactivate user");
 
       const result = await response.json();
-      if (Array.isArray(result)) {
-        setData(result);
-      }
+      if (Array.isArray(result)) setData(result);
       setShowDeleteAlert(true);
       setTimeout(() => setShowDeleteAlert(false), 3000);
     } catch (error) {
@@ -145,14 +151,10 @@ const YourComponent = () => {
         credentials: "include",
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to activate user");
-      }
+      if (!response.ok) throw new Error("Failed to activate user");
 
       const result = await response.json();
-      if (Array.isArray(result)) {
-        setData(result);
-      }
+      if (Array.isArray(result)) setData(result);
     } catch (error) {
       setError(error.message);
     }
@@ -203,7 +205,7 @@ const YourComponent = () => {
                     </a>
                   </td>
                   <td>
-                    <Badge bg={user.role === "admin" ? "success" : "danger"}>{user.role}</Badge>
+                    <RoleBadge role={user.role} />
                   </td>
                   <td>
                     <Button variant="outline-secondary" onClick={() => handleEdit(user)}>

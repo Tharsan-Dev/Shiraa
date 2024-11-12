@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,36 +14,61 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, {
-        email,
-        password,
-      },{withCredentials: true}); // front end cookie allowing
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/login`,
+        { email, password },
+        { withCredentials: true } // Front end cookie allowing
+      );
 
       const userData = res.data;
-      localStorage.setItem('user', JSON.stringify(res.data));
+      localStorage.setItem('user', JSON.stringify(userData));
 
-      alert('Login successful');
-
-      if (userData.role === 'admin') {
-        navigate('/admin'); // Redirect to admin dashboard
-      } else {
-        navigate('/'); // Redirect to home page for regular users
-      }
+      // Success notification
+      toast.success('Login successful!', {
+        onClose: () => {
+          // Navigate after a short delay to allow the user to see the notification
+          setTimeout(() => {
+            if (userData.role === 'admin') {
+              navigate('/admin/customer'); // Redirect to admin dashboard
+            } else {
+              navigate('/'); // Redirect to home page for regular users
+            }
+          }, 1000); // Adjust the delay as needed (in milliseconds)
+        },
+      });
     } catch (err) {
       setError('Invalid credentials');
+      // Error notification
+      toast.error('Invalid credentials');
     }
   };
 
   return (
+    <div className='d-flex  align-items-center justify-content-center' style={{border: `2px solid #01e281`,}}>
+      <div > 
+        <h1>Welcome back to Shiraa </h1>
+        <img>
+
+        </img>
+      </div>
     <div
       style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#f0f4f8'
+        backgroundColor: '#f0f4f8',
       }}
     >
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
+
       <div
         className="login-container"
         style={{
@@ -52,7 +79,7 @@ const Login = () => {
           borderRadius: '8px',
           boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
           textAlign: 'center',
-          border: `2px solid #334155`,
+          
         }}
       >
         <h2 style={{ color: '#334155', fontWeight: 'bold', marginBottom: '20px' }}>Login</h2>
@@ -74,7 +101,7 @@ const Login = () => {
               borderRadius: '5px',
               outline: 'none',
               fontSize: '16px',
-              color: '#334155'
+              color: '#334155',
             }}
           />
           <input
@@ -91,7 +118,7 @@ const Login = () => {
               borderRadius: '5px',
               outline: 'none',
               fontSize: '16px',
-              color: '#334155'
+              color: '#334155',
             }}
           />
           <button
@@ -99,13 +126,13 @@ const Login = () => {
             style={{
               width: '100%',
               padding: '10px',
-              backgroundColor: '#334155',
+              backgroundColor: '#01e281',
               color: '#fff',
               border: 'none',
               borderRadius: '5px',
               fontSize: '16px',
               fontWeight: 'bold',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Login
@@ -118,6 +145,7 @@ const Login = () => {
           </a>
         </p>
       </div>
+    </div>
     </div>
   );
 };

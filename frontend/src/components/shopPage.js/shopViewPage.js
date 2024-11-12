@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import imagegif from '/home/uki-jaffna/Downloads/shiraa/Shiraa-main/frontend/src/components/image/DreamAcres-ezgif.com-gif-maker.gif'
 // import { ShoppingCart, Menu, Search, ChevronRight } from "react-icons/bs"; // Use Bootstrap Icons or similar
+
+
 export default function ShopHomePage() {
 
   const [role, setRole] = useState(null);
@@ -62,17 +65,37 @@ export default function ShopHomePage() {
                 <Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Shop Now</Button>) : (null)
               }
               {
-                role === 'shopOwner' && (<Link to='/createproduct'><Button size="lg" variant="light" className="text-primary" >Add Product</Button></Link>)
+                role === 'shopOwner' && (<Link to='/createproduct'><Button size="lg"
+                  
+                  className=""
+                  style={{
+                    color: 'white',
+                    background: '#082f49',
+                    fontWeight: 'bold',
+                    border: "none",
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#01e281';
+                    e.target.style.color = '#082f49';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#082f49';
+                    e.target.style.color = 'white';
+                  }}
+                >Add Product
+                </Button>
+                </Link>)
               }
 
             </Col>
             <Col lg={6}>
-              <img src="https://res.cloudinary.com/ddctt6pye/image/upload/v1730525628/hgxxh1z97v97rndim5ql.gif"
+              <img src={imagegif}
                 alt="Featured Product"
                 className="img-fluid rounded shadow"
                 style={{
                   marginTop: '100px',
-                  height: '500px'
+                  height: '500px',
+                  marginLeft:'60px'
                 }} />
             </Col>
           </Row>

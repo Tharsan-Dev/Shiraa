@@ -8,7 +8,7 @@ export default function shop() {
   return (
     <div>
         
-        <NavigationBar/>
+        
         <ShopHomePage/>
         <ShopProductPage/>
         {/* <ProductPage/> */}

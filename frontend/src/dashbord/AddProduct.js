@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Container, FormGroup, FormLabel, FormControl, Spinner, Alert } from "react-bootstrap";
+import axios from 'axios';
+
 
 const AddProduct = () => {
   const [name, setName] = useState("");
@@ -11,10 +13,36 @@ const AddProduct = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [shop, setShop] = useState(null);
+  const [loading2, setLoading2] = useState(true);
+ 
 
   const handleFileChange = (e) => {
     setImages(e.target.files);
   };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user')) || {};
+    const userId = user._id;
+
+    if (userId) {
+      const fetchShop = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/shops/shop/${userId}`);
+          setShop(response.data);
+        } catch (err) {
+          setError('Error fetching shop details');
+        } finally {
+          setLoading2(false);
+        }
+      };
+
+      fetchShop();
+    } else {
+      setError('User ID not found in local storage');
+      setLoading2(false);
+    }
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -28,6 +56,7 @@ const AddProduct = () => {
     formData.append("price", price);
     formData.append("quantity", quantity);
     formData.append("stock", stock);
+    formData.append('shop',shop._id);
 
     for (let i = 0; i < images.length; i++) {
       formData.append("images", images[i]);
@@ -64,6 +93,9 @@ const AddProduct = () => {
     if (parts.length === 2) return parts.pop().split(";").shift();
   };
 
+  if (loading2) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <main style={{ backgroundColor: "#f8f9fa", padding: "3rem", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
       <Container style={{
@@ -77,6 +109,7 @@ const AddProduct = () => {
         border: `2px solid #334155`,
       }}>
         <h1 className="text-center mb-4" style={{ color: "#334155", fontWeight: "bold" }}>Add New Product</h1>
+        <h1>{shop.name}</h1>
 
         {loading && (
           <div className="d-flex justify-content-center align-items-center" style={{ height: "50vh" }}>

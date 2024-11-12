@@ -9,18 +9,19 @@ function CustomerFeedbacks() {
 
 
   const testimonials = [
-    { name: 'T.Tharsan', photo: 'https://via.placeholder.com/80', review: 'Shiraa made shopping local so easy!', rating: 5 },
-    { name: 'J.Jathushan', photo: 'https://via.placeholder.com/80', review: 'I love supporting my community through Shiraa.', rating: 5 },
-    { name: 'M.Lakshiga', photo: 'https://via.placeholder.com/80', review: 'The variety of shops is amazing!', rating: 5 },
+    { name: 'T.Tharsan', photo: 'https://res.cloudinary.com/ddctt6pye/image/upload/v1730907221/nagpbcz4vwax6hgv313z.jpg', review: 'Shiraa made shopping local so easy!', rating: 5 },
+    { name: 'J.Jathushan', photo: 'https://res.cloudinary.com/ddctt6pye/image/upload/v1730907221/y5xhquam1zdhmchnghps.jpg', review: 'I love supporting my community through Shiraa.', rating: 5 },
+    { name: 'M.Lakshiga', photo: 'https://res.cloudinary.com/ddctt6pye/image/upload/v1730907225/ezvozolltfqtel5goiry.png', review: 'The variety of shops is amazing!', rating: 5 },
   ];
 
 
   return (
-    <div style={{ backgroundColor: '#e2e8f0' }}>
+    <div >
         <section id="About-Us" className="py-5 " >
          
         <Container>
-          <h2 className="text-center mb-4">What Our Customers Say</h2>
+        <h2 className="text-center mb-3 fw-bold">What Our Customers <span style={{ color: '#01e281' }}> Say</span></h2>
+
           <Carousel
             activeIndex={currentTestimonial}
             onSelect={(selectedIndex) => setCurrentTestimonial(selectedIndex)}

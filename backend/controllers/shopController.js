@@ -4,7 +4,16 @@ import cloudinary from "../utils/cloudinary.js";
 
 // Shop Registration Controller
 const ShopRegister = async (req, res) => {
-    const { name } = req.body;
+    const {
+        name,
+        ownerName,
+        email,
+        password,
+        phoneNumber,
+        address,
+        category,
+        description,
+    } = req.body;
 
     // Cloudinary uploader function
     const uploader = async (path) => {
@@ -47,8 +56,16 @@ const ShopRegister = async (req, res) => {
         // Create new shop
         const shop = await shopModel.create({
             name,
+            ownerName,
+            email,
+            password,
+            phoneNumber,
+            address,
+            category,
+            description,
             imageUrls: urls,  // Store Cloudinary image URLs
-            userId: req.user._id  // Associate shop with user ID
+            userId: req.user._id,  // Associate shop with user ID
+            role: "shopOwner",
         });
 
         // Update the user's role to "shopOwner"
@@ -89,7 +106,7 @@ const getShops = async (req, res) => {
     }
 };
 
-// Get Shop by ID Controller (optional, in case you need it for individual shop pages)
+// Get Shop by ID Controller
 const getShopById = async (req, res) => {
     try {
         const { shopId } = req.params;
@@ -108,4 +125,23 @@ const getShopById = async (req, res) => {
     }
 };
 
-export { ShopRegister, getShops, getShopById };
+// Get a shop by userId
+ const getShopByUserId = async (req, res) => {
+    try {
+      const { userId } = req.params; // Extract userId from request params
+      console.log(userId);
+      
+      const shop = await shopModel.findOne({ userId });
+      
+  
+      if (!shop) {
+        return res.status(404).json({ message: 'Shop not found for this user' });
+      }
+  
+      res.status(200).json(shop);
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
+
+export { ShopRegister, getShops, getShopById,getShopByUserId };

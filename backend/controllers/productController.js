@@ -207,7 +207,7 @@ export const getItemById = async (req, res) => {
 
 // Function to create a new item
 export const createItem = async (req, res) => {
-    const { name, category, price, description, quantity, stock } = req.body;
+    const { name, category, price, description, quantity, stock,shop } = req.body;
     const files = req.files;
 
     try {
@@ -259,7 +259,8 @@ export const createItem = async (req, res) => {
             imageUrls: urls,
             createdBy: user._id,   // Save the user who created the product
             creatorRole,           // Save the role (admin or shopOwner)
-            shop: shopId           // Associate with the shop if created by shopOwner
+            shop: shopId ,          // Associate with the shop if created by shopOwner
+            shopId:shop
         });
 
         // Save the product in the database

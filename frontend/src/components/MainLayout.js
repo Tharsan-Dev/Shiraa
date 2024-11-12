@@ -286,7 +286,7 @@ const MainLayout = () => {
           collapsed={collapsed}
           onCollapse={(value) => setCollapsed(value)}
           trigger={null}
-          style={{ height: "100vh" }}
+          style={{ height: "120vh" }}
         >
           <div className="logo text-center py-3">
             <h2 className="text-white fs-5 mb-0">
@@ -361,15 +361,10 @@ const MainLayout = () => {
               }
             )}
             <div>
-                 <img
-                   width={32}
-                   height={32}
-                  //  src={image}                  
-                   alt=""
-                 />
+                 
                </div>
-            <div className="">
-              <h5 className="">Welcome, Admin</h5>
+            <div className="" style={{ color: "#021024" }}>
+              <h5 className="fw-bold"  >Welcome, Admin</h5>
             </div>
           </Header>
           <Content
