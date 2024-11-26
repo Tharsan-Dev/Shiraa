@@ -15,7 +15,7 @@ function ProductPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products/view');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/view`);
         const data = await response.json();
         setProducts(data);
       } catch (err) {
