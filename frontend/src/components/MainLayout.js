@@ -301,11 +301,11 @@ const MainLayout = () => {
               navigate(key);
             }}
             items={[
-              {
-                key: "",
-                icon: <AiOutlineDashboard className="fs-4" />,
-                label: "Dashboard",
-              },
+              // {
+              //   key: "",
+              //   icon: <AiOutlineDashboard className="fs-4" />,
+              //   label: "Dashboard",
+              // },
               {
                 key: "customer",
                 icon: <AiOutlineUser className="fs-4" />,
@@ -316,11 +316,11 @@ const MainLayout = () => {
                 icon: <AiOutlineShoppingCart className="fs-4" />,
                 label: "Catalog",
                 children: [
-                  {
-                    key: "addproduct",
-                    icon: <AiOutlineShoppingCart className="fs-4" />,
-                    label: "Add Product",
-                  },
+                  // {
+                  //   key: "addproduct",
+                  //   icon: <AiOutlineShoppingCart className="fs-4" />,
+                  //   label: "Add Product",
+                  // },
                   {
                     key: "list-product",
                     icon: <AiOutlineShoppingCart className="fs-4" />,

@@ -119,7 +119,6 @@ function ProductPage() {
               <p className="text-center">Loading products...</p>
             )}
           </Row>
-
           <div className="d-flex justify-content-between">
             <Button
               onClick={prevPage}
@@ -161,7 +160,7 @@ function ProductPage() {
           <div className="text-center" style={{ marginTop: '-33px' }}>
             <Link to="/all-products">
               <Button variant="info"
-                style={{ background: "#082f49", color: 'white',border:'none' }}
+                style={{ background: "#082f49", color: 'white', border: 'none' }}
                 onMouseOver={(e) => (e.target.style.color = '#01e281')}
                 onMouseOut={(e) => (e.target.style.color = 'white')}>View All Products</Button>
             </Link>

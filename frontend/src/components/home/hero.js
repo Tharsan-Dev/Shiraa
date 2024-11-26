@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 export const Hero = (props) => {
   // State to track the current image source
-  const [currentImage, setCurrentImage] = useState('https://res.cloudinary.com/ddctt6pye/image/upload/v1731059994/s5metlscwn7wvxyl1bhp.png');
+  const [currentImage, setCurrentImage] = useState('https://res.cloudinary.com/ddctt6pye/image/upload/v1731392820/shcz9zgk6uzo0ttkdiiq.png');
 
   // Handlers to change the image on hover
   const handleMouseEnter = () => {
@@ -15,7 +15,7 @@ export const Hero = (props) => {
   };
 
   const handleMouseLeave = () => {
-    setCurrentImage('https://res.cloudinary.com/ddctt6pye/image/upload/v1731059994/s5metlscwn7wvxyl1bhp.png');
+    setCurrentImage('https://res.cloudinary.com/ddctt6pye/image/upload/v1731392820/shcz9zgk6uzo0ttkdiiq.png');
   };
 
   // Function to scroll to the Products section
@@ -35,27 +35,27 @@ export const Hero = (props) => {
   };
 
   return (
+    
     <section
       id="Home"
-      className="text-white text-center p-5 d-flex align-items-center justify-content-center"
+      className=" text-white text-center "
       style={{
         backgroundColor: '#e2e8f0',
         height: "100vh",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        
         
       }}
     >
-      <Container className="mt-5">
-        <Row className="align-items-center">
+      
+      <Container >
+        <Row className="align-items-center text-start">
           {/* Left Content */}
-          <Col md={8} className="text-start mb-5">
-            <h1 className="display-3 fw-bold " style={{ color: "#021024" }}>
+          <Col lg={6} className=" mb-lg-0">
+            <h1 className="display-3 fw-bold " style={{ color: "#021024", fontFamily:'yesova one' }}>
               Your One-Stop Shop for Daily Needs
             </h1>
 
-            <p className=' fs-5 text-md-center text-lg-start' style={{ color: '#818c96',textAlign:'justify',width:'740px'}}>
+            <p className=' fs-5 text-md-center text-lg-start' style={{ color: '#818c96',textAlign:'justify',justifyContent:'center',justifyItems:'center'}}>
             Shiraa is your one-stop solution for daily essentials, connecting you with local shops for seamless shopping. Access a wide range of products easily from trusted vendors, simplifying your routine with efficient ordering. </p>
             <div>
               <Button
@@ -82,8 +82,8 @@ export const Hero = (props) => {
           </Col>
 
           {/* Right Image */}
-          <Col md={4} className="d-flex justify-content-center">
-            <div style={{ width: '100%', maxWidth: '350px', marginRight: '410px' }}>
+          <Col lg={6} className="d-flex justify-content-center">
+            <div style={{ width: '100%', maxWidth: '350px', marginRight: '310px' }}>
               
               <img
                 src={currentImage}

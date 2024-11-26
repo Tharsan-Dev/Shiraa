@@ -248,7 +248,7 @@ const YourComponent = () => {
                   value={editedRole}
                   onChange={(e) => setEditedRole(e.target.value)}
                 >
-                  <option value="admin">Admin</option>
+                  <option value="admin" >Admin</option>
                   <option value="customer">Customer</option>
                   <option value="shopOwner">Shop Owner</option>
                 </Form.Control>
@@ -270,3 +270,4 @@ const YourComponent = () => {
 };
 
 export default YourComponent;
+

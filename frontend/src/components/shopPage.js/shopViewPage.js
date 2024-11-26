@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import imagegif from '/home/uki-jaffna/Downloads/shiraa/Shiraa-main/frontend/src/components/image/DreamAcres-ezgif.com-gif-maker.gif'
+import imagegif from '../image/DreamAcres-ezgif.com-gif-maker.gif'
 // import { ShoppingCart, Menu, Search, ChevronRight } from "react-icons/bs"; // Use Bootstrap Icons or similar
 
 
@@ -62,11 +62,30 @@ export default function ShopHomePage() {
               <h2 className="display-3 fw-bold mt-5" style={{ color: "#021024" }}>Discover Your Style with Shiraa</h2>
               <p className="lead text-muted" >"Elevate your daily essentials with our curated collection of quality, fresh, and convenient grocery items, tailored for your needs. Discover everything your kitchen craves, all in one place!"</p>
               {role === 'customer' ? (
-                <Button size="lg" variant="light" className="text-primary" onClick={handleShopNowClick}>Shop Now</Button>) : (null)
+                <Button size="lg"
+                  variant="light"
+                  
+                  style={{
+                    color: 'white',
+                    background: '#082f49',
+                    fontWeight: 'bold',
+                    border: "none",
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#01e281';
+                    e.target.style.color = '#082f49';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#082f49';
+                    e.target.style.color = 'white';
+                  }}
+                  onClick={handleShopNowClick}
+                >Shop Now
+                </Button>) : (null)
               }
               {
                 role === 'shopOwner' && (<Link to='/createproduct'><Button size="lg"
-                  
+
                   className=""
                   style={{
                     color: 'white',
@@ -95,7 +114,7 @@ export default function ShopHomePage() {
                 style={{
                   marginTop: '100px',
                   height: '500px',
-                  marginLeft:'60px'
+                  marginLeft: '60px'
                 }} />
             </Col>
           </Row>

@@ -73,6 +73,7 @@ import { NavigationBar } from './components/home/navbar';
 import Footer from './components/home/Footer';
 import OrdersTable from './dashbord/Orders';
 import AllProductPage from './components/home/allProductPage';
+import AllShopsPage from './components/home/allShops';
 
 
 
@@ -108,6 +109,8 @@ function App() {
           <Route path="/order-confirmation" element={<OrderConfirmationPage/>} />
           <Route path="/createproduct" element={<CreateProduct/>}/>
           <Route path="/all-products" element={<AllProductPage/>}/>
+          <Route path="/all-shops" element={<AllShopsPage/>}/>
+
           
 
           

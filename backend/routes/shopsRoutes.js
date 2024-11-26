@@ -11,4 +11,8 @@ router.get('/getAllShops',getShops);
 router.get('/:shopId', getShopById);
 router.get('/shop/:userId', getShopByUserId);
 
+// router.put("/deactivateShop/:id", deactivateShop);
+
+// Activate a shop
+// router.put("/activateShop/:id", activateShop);
 export default router;

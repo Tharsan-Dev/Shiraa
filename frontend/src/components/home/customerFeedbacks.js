@@ -17,7 +17,14 @@ function CustomerFeedbacks() {
 
   return (
     <div >
-        <section id="About-Us" className="py-5 " >
+        <section id="About-Us"
+         className="py-5 " 
+         style={{
+          backgroundColor: '#e2e8f0',
+          height: "70vh",
+          
+          
+        }}>
          
         <Container>
         <h2 className="text-center mb-3 fw-bold">What Our Customers <span style={{ color: '#01e281' }}> Say</span></h2>

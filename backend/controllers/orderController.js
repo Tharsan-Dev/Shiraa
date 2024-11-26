@@ -125,6 +125,8 @@ export const updateOrderStatus = async (req, res) => {
 export const deleteOrder = async (req, res) => {
   try {
     let order = await Order.findById(req.params.id);
+    console.log(req.params.id);
+    
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }

@@ -66,38 +66,13 @@ function AllProductPage() {
 
   return (
     <div>
-      <section className="py-3" id='Products'>
+      <section className="py-3" id="Products">
         <Container>
           <h2 className="text-center mb-3 fw-bold mt-5" style={{ color: 'black' }}>
             All <span style={{ color: '#01e281' }}>Products</span>
           </h2>
 
-          {/* Search Bar for Shop Names */}
-          {/* <Form.Control
-            type="text"
-            placeholder="Search by shop name"
-            className="mb-4"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          /> */}
-
-          {/* Filter Dropdown */}
-          {/* <Form.Select
-            aria-label="Filter by shop"
-            className="mb-4"
-            onChange={handleShopChange}
-            value={selectedShop}
-          >
-            <option value="All">All Shops</option>
-            {shopNames.map((shop, index) => (
-              <option key={index} value={shop}>
-                {shop}
-              </option>
-            ))}
-          </Form.Select> */}
-
           {selectedShop === 'All' ? (
-            // Group products by shop name when viewing all shops
             shopNames.map((shop, index) => (
               <div key={index} className="mb-4">
                 <h3 className="fw-bold" style={{ color: '#01e281' }}>{shop}</h3>
@@ -106,30 +81,54 @@ function AllProductPage() {
                     .filter((product) => product.shopName === shop)
                     .map((product) => (
                       <Col sm={6} lg={3} key={product._id} className="mb-4">
-                        <motion.div whileHover={{ scale: 1.1 }} transition={{ type: 'spring', stiffness: 50 }}>
-                          <Card className="p-2" style={{ border: "none" }}>
+                        <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
+                          <Card
+                            className="p-2"
+                            style={{
+                              border: "none",
+                              borderRadius: '10px',
+                              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)', // Add box shadow
+                              transition: 'box-shadow 0.3s ease, transform 0.3s ease', // Light popup effect
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4)';
+                              e.currentTarget.style.transform = 'scale(1.02)'; // Slight scale up
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.8)';
+                              e.currentTarget.style.transform = 'scale(1)';
+                            }}
+                          >
                             <Link>
-                              <Card.Img src={product.imageUrls[0]} variant="top" style={{ height: '280px', width: '290px' }} />
+                              <Card.Img
+                                src={product.imageUrls[0]}
+                                variant="top"
+                                style={{
+                                  height: '200px', // Adjust image height
+                                  objectFit: 'cover',
+                                  borderRadius: '8px',
+                                }}
+                              />
                             </Link>
                             <Card.Body>
-                              <Link style={{ textDecoration: "none", color: "#777", fontSize: "20px" }}>
+                              <Link style={{ textDecoration: 'none', color: '#777', fontSize: '18px' }}>
                                 <Card.Title as="div">
                                   <strong>{product.name}</strong>
                                 </Card.Title>
                               </Link>
-                              <Card.Text as="h5" className='fw-bold' style={{ color: "black" }}>
+                              <Card.Text as="h5" className="fw-bold" style={{ color: 'black' }}>
                                 Rs {product.price}
                               </Card.Text>
                               <motion.div whileHover={{ scale: 1.1 }} transition={{ type: 'spring', stiffness: 300 }}>
                                 <Button
                                   variant="warning"
-                                  className="w-90"
+                                  className="w-100"
                                   onClick={() => addToCart(product)}
                                   style={{
                                     color: 'white',
                                     background: '#082f49',
                                     fontWeight: 'bold',
-                                    border: "none"
+                                    border: 'none',
                                   }}
                                   onMouseOver={(e) => {
                                     e.target.style.backgroundColor = '#01e281';
@@ -155,30 +154,54 @@ function AllProductPage() {
             <Row>
               {filteredProducts.map((product) => (
                 <Col sm={6} lg={3} key={product._id} className="mb-4">
-                  <motion.div whileHover={{ scale: 1.1 }} transition={{ type: 'spring', stiffness: 50 }}>
-                    <Card className="p-2" style={{ border: "none" }}>
+                  <motion.div whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
+                    <Card
+                      className="p-2"
+                      style={{
+                        border: "none",
+                        borderRadius: '10px',
+                        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+                        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4)';
+                        e.currentTarget.style.transform = 'scale(1.02)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
                       <Link>
-                        <Card.Img src={product.imageUrls[0]} variant="top" style={{ height: '280px', width: '290px' }} />
+                        <Card.Img
+                          src={product.imageUrls[0]}
+                          variant="top"
+                          style={{
+                            height: '200px',
+                            objectFit: 'cover',
+                            borderRadius: '8px',
+                          }}
+                        />
                       </Link>
                       <Card.Body>
-                        <Link style={{ textDecoration: "none", color: "#777", fontSize: "20px" }}>
+                        <Link style={{ textDecoration: 'none', color: '#777', fontSize: '18px' }}>
                           <Card.Title as="div">
                             <strong>{product.name}</strong>
                           </Card.Title>
                         </Link>
-                        <Card.Text as="h5" className='fw-bold' style={{ color: "black" }}>
+                        <Card.Text as="h5" className="fw-bold" style={{ color: 'black' }}>
                           Rs {product.price}
                         </Card.Text>
                         <motion.div whileHover={{ scale: 1.1 }} transition={{ type: 'spring', stiffness: 300 }}>
                           <Button
                             variant="warning"
-                            className="w-90"
+                            className="w-100"
                             onClick={() => addToCart(product)}
                             style={{
                               color: 'white',
                               background: '#082f49',
                               fontWeight: 'bold',
-                              border: "none"
+                              border: 'none',
                             }}
                             onMouseOver={(e) => {
                               e.target.style.backgroundColor = '#01e281';

@@ -44,13 +44,13 @@ const Login = () => {
   };
 
   return (
-    <div className='d-flex  align-items-center justify-content-center' style={{border: `2px solid #01e281`,}}>
-      <div > 
-        <h1>Welcome back to Shiraa </h1>
-        <img>
+    // <div className='d-flex  align-items-center justify-content-center' style={{border: `2px solid #01e281`,}}>
+    //   <div > 
+    //     <h1>Welcome back to Shiraa </h1>
+    //     <img>
 
-        </img>
-      </div>
+    //     </img>
+    //   </div>
     <div
       style={{
         display: 'flex',
@@ -146,7 +146,7 @@ const Login = () => {
         </p>
       </div>
     </div>
-    </div>
+    // </div>
   );
 };
 

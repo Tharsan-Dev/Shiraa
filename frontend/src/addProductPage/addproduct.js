@@ -8,7 +8,6 @@ export default function CreateProduct() {
   return (
     <div>
         
-        <NavigationBar/>
         <AddProduct/>
         
         

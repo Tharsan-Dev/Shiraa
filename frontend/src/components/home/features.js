@@ -276,7 +276,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-
+import { AiTwotoneShop } from "react-icons/ai";
 
 
 // Custom previous arrow
@@ -445,9 +445,25 @@ function Features() {
               </Card>
             ))}
           </Slider>
+          
         ) : (
           <p className="text-center">Loading shops...</p>
         )}
+            <div className="text-end" style={{ marginTop:'-50px',
+            cursor:'pointer',
+             }}>
+            <Link to="/all-shops">
+              <Button variant="info"
+                style={{ background: "#082f49", color: 'white',border:'none' }}
+                onMouseOver={(e) => (e.target.style.color = '#01e281')}
+                onMouseOut={(e) => (e.target.style.color = 'white')}>
+
+
+                  View More
+                  <AiTwotoneShop  className='fs-4'/>
+                  </Button>
+            </Link>
+          </div>
       </Container>
     </section>
   );

@@ -7,6 +7,7 @@ import CustomerFeedbacks from '../components/home/customerFeedbacks';
 import Footer from "../components/home/Footer";
 import { NavigationBar } from '../components/home/navbar';
 import ProductPage from '../components/home/productPage';
+import AdvertisementGallery from '../components/home/advertismentGallery';
 
 
 export default function ShiraaLandingPage() {
@@ -22,6 +23,8 @@ export default function ShiraaLandingPage() {
       <Hero/>
       {/* Featured Shops */}
       <Features/>
+
+      <AdvertisementGallery/>
 
       < ProductPage/>
       {/* Subscription Packages */}

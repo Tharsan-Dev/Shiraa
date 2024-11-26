@@ -57,6 +57,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row, ButtonGroup } from 'react-bootstrap';
 import { redirect, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -92,6 +94,8 @@ function CartPage() {
     const updatedCart = cartItems.filter(item => item._id !== productId);
     setCartItems(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
+    toast.error('product removed')
+    
   };
 
   // Increment the quantity of a product
@@ -173,7 +177,7 @@ function CartPage() {
             <div className="text-center">
               <h4>Total Price: ${getTotalPrice()}</h4>
               <Button
-              style={{backgroundColor:'#01e281'}}
+              style={{backgroundColor:'#01e281',border:'none',color:'black'}}
                 className='fw-bold'
                 onMouseOver={(e) => {
                   e.target.style.backgroundColor = '#082f49';
@@ -181,7 +185,7 @@ function CartPage() {
                 }}
                 onMouseOut={(e) => {
                   e.target.style.backgroundColor = '#01e281';
-                  e.target.style.color = '#082f49';
+                  e.target.style.color = 'black';
                 }}
                 onClick={handleOrderCreate}>Proceed to Checkout</Button>
             </div>

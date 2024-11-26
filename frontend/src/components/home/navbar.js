@@ -245,23 +245,25 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Button, Container, NavDropdown, Modal } from 'react-bootstrap';
-import { AiOutlineHome, AiOutlineInfoCircle, AiOutlineMail, AiOutlineUser, AiOutlineLogout, AiOutlineShoppingCart } from 'react-icons/ai';
-import { FaCog } from 'react-icons/fa';
+import { Navbar, Nav, Button, Container, NavDropdown, Modal, Badge } from 'react-bootstrap';
+import { AiOutlineHome, AiOutlineInfoCircle, AiOutlineMail, AiOutlineUser, AiOutlineShoppingCart, AiTwotoneHome, AiTwotoneShop } from 'react-icons/ai';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import ShopRegisterForm from './ShopRegister';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
+
 
 
 export const NavigationBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [navbarBackground, setNavbarBackground] = useState('transparent');
-    const [userProfile, setUserProfile] = useState(null);
+    const [userProfile, setUserProfile] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [role, setRole] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    // const [cartCount, setCartCount] = useState(0);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -278,10 +280,22 @@ export const NavigationBar = () => {
         if (user) {
             setRole(user.role);
             setIsLoggedIn(true);
-            setUserProfile(user.profilePicture);
+            setUserProfile(user.name);
         }
     }, []);
 
+    // useEffect(() => {
+    //     // Retrieve the user object from local storage
+    //     const storedUser = localStorage.getItem("user");
+    //     if (storedUser) {
+    //       try {
+    //         setUser(JSON.parse(storedUser)); // Parse the JSON string into an object
+    //       } catch (error) {
+    //         console.error("Failed to parse user data:", error);
+    //       }
+    //     }
+    //   }, []);
+      
     useEffect(() => {
         const handleScroll = () => {
             setNavbarBackground(window.scrollY > 50 ? '#082f49' : 'transparent');
@@ -310,6 +324,21 @@ export const NavigationBar = () => {
         }
     };
 
+    // useEffect(() => {
+    //     const updateCartCount = () => {
+    //       const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    //       setCartCount(cart.length);
+    //     };
+
+    //     updateCartCount();
+
+    //     window.addEventListener('cartUpdated', updateCartCount);
+
+    //     return () => {
+    //       window.removeEventListener('cartUpdated', updateCartCount);
+    //     };
+    //   }, []);
+
     return (
 
         <>
@@ -328,9 +357,9 @@ export const NavigationBar = () => {
                 style={{ background: "#082f49" }}
                 className="rounded mx-5 fixed-top"
             >
-                <Container>
+                <Container >
                     <Navbar.Brand as={Link} to="/" style={{
-                        display:'flex',
+                        display: 'flex',
                         width: '80px',
                         height: '40px',
                     }}
@@ -338,11 +367,11 @@ export const NavigationBar = () => {
                         <img
                             src="https://res.cloudinary.com/ddctt6pye/image/upload/v1731245261/nxbjgbl4xh6twrjxbwt6.svg"
                             alt="Shiraa Logo"
-                            width= '120px'
-                            height= '120px'
-                            
+                            width='120px'
+                            height='120px'
 
-                        style={{marginTop:'-45px',marginLeft:'-10px'}}/>
+
+                            style={{ marginTop: '-45px', marginLeft: '-10px' }} />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -354,6 +383,7 @@ export const NavigationBar = () => {
                                 onMouseOut={(e) => (e.target.style.color = 'white')}
                             >
                                 Home
+                                {/* <AiTwotoneHome className='fs-4 mb-2'/> */}
                             </Nav.Link>
 
                             <Nav.Link
@@ -363,6 +393,7 @@ export const NavigationBar = () => {
                                 onMouseOut={(e) => (e.target.style.color = 'white')}
                             >
                                 Shops
+                                {/* <AiTwotoneShop  className='fs-4 mb-2'/> */}
                             </Nav.Link>
 
                             <Nav.Link
@@ -395,21 +426,22 @@ export const NavigationBar = () => {
                                 onMouseOver={(e) => (e.target.style.color = '#01e281')}
                                 onMouseOut={(e) => (e.target.style.color = 'white')}
                             >
+
                                 <AiOutlineShoppingCart style={{ fontSize: '25px' }} />
                             </Nav.Link>
+
 
 
                             {role && (
                                 <Nav.Link onClick={handleOpenModal} className="text-decoration-none text-muted">
                                     <Button size="sm"
-                                        style={{
-                                            color: 'white',
-                                            background: '#01e281',
-                                            fontWeight: 'bold',
-                                            border: 'none'
-                                        }}
-                                        onMouseOver={(e) => (e.target.style.color = '#082f49')}
-                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                                        style={{ color: 'black', background: '#e2e8f0', fontWeight: 'bold', border: 'none' }}
+                                        onMouseOver={(e) => (e.target.style.color = '#01e281',
+                                            e.target.style.backgroundColor = '#082f49'
+                                        )}
+                                        onMouseOut={(e) => (e.target.style.color = 'black',
+                                            e.target.style.backgroundColor = '#e2e8f0'
+                                        )}
                                     >OwnStore
                                     </Button>
                                 </Nav.Link>
@@ -419,26 +451,55 @@ export const NavigationBar = () => {
                                     <Button onClick={handleLogOut}
                                         size="sm"
                                         className="ml-3 h-5"
-                                        style={{ color: 'white', background: '#01e281', fontWeight: 'bold', border: 'none' }}
-                                        onMouseOver={(e) => (e.target.style.color = '#082f49')}
-                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                                        style={{ color: 'black', background: '#e2e8f0', fontWeight: 'bold', border: 'none' }}
+                                        onMouseOver={(e) => (e.target.style.color = '#01e281',
+                                            e.target.style.backgroundColor = '#082f49'
+                                        )}
+                                        onMouseOut={(e) => (e.target.style.color = 'black',
+                                            e.target.style.backgroundColor = '#e2e8f0'
+                                        )}
 
                                     >
                                         Logout
+                                        {/* <AiOutlineLogout className='fs-5'/> */}
                                     </Button>
                                 </Nav.Link>
                             ) : (
                                 <Nav.Link href="/login" className="text-decoration-none">
                                     <Button size="sm"
                                         variant="success"
-                                        style={{ color: 'white', background: '#01e281', fontWeight: 'bold' }}
+                                        style={{ color: 'black', background: '#01e281', fontWeight: 'bold' }}
                                         onMouseOver={(e) => (e.target.style.color = '#082f49')}
-                                        onMouseOut={(e) => (e.target.style.color = 'white')}
+                                        onMouseOut={(e) => (e.target.style.color = 'black')}
                                     >
                                         Login
                                     </Button>
                                 </Nav.Link>
                             )}
+
+                            {role && (
+                                <Nav.Link  className="text-decoration-none text-muted">
+                                     <motion.div whileHover={{ scale: 1.3 }} transition={{ type: 'spring', stiffness: 300 }}>
+                                    <Button size="sm"
+                                        style={{
+                                            color: 'black',
+                                            background: '#e2e8f0',
+                                            fontWeight: 'bold',
+                                            border: 'none'
+                                        }}
+                                        // onMouseOver={(e) => (e.target.style.color = '#01e281',
+                                        //     e.target.style.backgroundColor = '#082f49'
+                                        // )}
+                                        // onMouseOut={(e) => (e.target.style.color = 'black',
+                                        //     e.target.style.backgroundColor = '#e2e8f0'
+                                        // )}
+                                    > <span><AiOutlineUser style={{ fontSize: '20px' }} /></span>{userProfile}
+                                    </Button>
+                                    </motion.div>
+                                </Nav.Link>
+                            )}
+
+
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

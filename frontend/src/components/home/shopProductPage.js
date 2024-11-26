@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion'; // Import motion
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+
 
 function ShopProductPage() {
   const [products, setProducts] = useState([]);
@@ -46,7 +49,7 @@ function ShopProductPage() {
         localStorage.setItem('cart', JSON.stringify(updatedCart));
       }
   
-      alert(`${product.name} added to cart!`);
+      toast.success(`${product.name} added to cart!`);
     };
   
 

@@ -126,22 +126,55 @@ const getShopById = async (req, res) => {
 };
 
 // Get a shop by userId
- const getShopByUserId = async (req, res) => {
+const getShopByUserId = async (req, res) => {
     try {
-      const { userId } = req.params; // Extract userId from request params
-      console.log(userId);
-      
-      const shop = await shopModel.findOne({ userId });
-      
-  
-      if (!shop) {
-        return res.status(404).json({ message: 'Shop not found for this user' });
-      }
-  
-      res.status(200).json(shop);
-    } catch (error) {
-      res.status(500).json({ message: 'Server error', error: error.message });
-    }
-  };
+        const { userId } = req.params; // Extract userId from request params
+        console.log(userId);
 
-export { ShopRegister, getShops, getShopById,getShopByUserId };
+        const shop = await shopModel.findOne({ userId });
+
+
+        if (!shop) {
+            return res.status(404).json({ message: 'Shop not found for this user' });
+        }
+
+        res.status(200).json(shop);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+
+
+// Deactivate Shop Controller
+// Deactivate a shop
+// export const deactivateShop = async (req, res) => {
+//     try {
+//       const { id } = req.params;
+//       const shop = await shopModel.findByIdAndUpdate(id, { role: "inactive" }, { new: true });
+  
+//       if (!shop) return res.status(404).json({ message: "Shop not found" });
+  
+//       res.status(200).json(shop);
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+//   };
+  
+  // Activate a shop
+//   export const activateShop = async (req, res) => {
+//     try {
+//       const { id } = req.params;
+//       const shop = await shopModel.findByIdAndUpdate(id, { role: "shopOwner" }, { new: true });
+  
+//       if (!shop) return res.status(404).json({ message: "Shop not found" });
+  
+//       res.status(200).json(shop);
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+//   };
+
+
+
+export { ShopRegister, getShops, getShopById, getShopByUserId  };
