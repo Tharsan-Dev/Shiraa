@@ -18,6 +18,7 @@ dotenv.config();
 const port = process.env.PORT || 8000;
 
 // Connect to the database
+    // "mongod": "^2.0.0",
 connectDB();
 
 const app = express();
