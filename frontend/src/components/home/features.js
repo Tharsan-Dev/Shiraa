@@ -327,10 +327,12 @@ function Features() {
   const navigate = useNavigate();
 
   // Fetch shops data from backend
+    // `${process.env.REACT_APP_BACKEND_URL}/api/products/view`
+
   useEffect(() => {
     const fetchShops = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/shops/getAllShops');
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/shops/getAllShops`);
         const data = await response.json();
         setShops(data); // Set the fetched shops data
       } catch (err) {

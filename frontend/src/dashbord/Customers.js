@@ -50,7 +50,7 @@ const YourComponent = () => {
       const fetchData = async () => {
         try {
           const jwtToken = getCookie("jwt");
-          const response = await fetch("http://localhost:5000/api/users/allUsers", {
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/allUsers`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -96,7 +96,7 @@ const YourComponent = () => {
   const handleSaveEdit = async () => {
     try {
       const jwtToken = getCookie("jwt");
-      const response = await fetch(`http://localhost:5000/api/users/updateRole/${selectedUser._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/updateRole/${selectedUser._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const YourComponent = () => {
   const handleDeactivate = async (id) => {
     try {
       const jwtToken = getCookie("jwt");
-      const response = await fetch(`http://localhost:5000/api/users/deactivateUser/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/deactivateUser/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +142,7 @@ const YourComponent = () => {
   const handleActivate = async (id) => {
     try {
       const jwtToken = getCookie("jwt");
-      const response = await fetch(`http://localhost:5000/api/users/activateUser/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/activateUser/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

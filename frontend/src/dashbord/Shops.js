@@ -23,7 +23,7 @@ const ShopListTable = () => {
       setLoading(true);
       try {
         const jwtToken = getCookie("jwt"); // Retrieve the JWT token from cookies
-        const response = await fetch('http://localhost:5000/api/shops/getAllShops', {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/shops/getAllShops`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${jwtToken}`, // Attach the token in the request headers

@@ -12,7 +12,7 @@ export default function OrderSuccessful() {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders/create');  // Adjust your endpoint as needed
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/orders/create`);  // Adjust your endpoint as needed
         setOrderDetails(response.data);
       } catch (err) {
         setError('Failed to load order details');

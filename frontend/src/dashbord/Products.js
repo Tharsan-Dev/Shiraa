@@ -166,7 +166,7 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/products/view");
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/view`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -202,7 +202,7 @@ const ProductList = () => {
     try {
       const jwtToken = getCookie("jwt");
   
-      const response = await fetch(`http://localhost:5000/api/products/update/${selectedProduct._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/update/${selectedProduct._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ const ProductList = () => {
   const handleDelete = async (id) => {
     try {
       const jwtToken = getCookie("jwt");
-      const response = await fetch(`http://localhost:5000/api/products/delete/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

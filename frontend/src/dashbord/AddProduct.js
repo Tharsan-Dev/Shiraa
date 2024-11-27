@@ -28,7 +28,7 @@ const AddProduct = () => {
     if (userId) {
       const fetchShop = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/shops/shop/${userId}`);
+          const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/shops/shop/${userId}`);
           setShop(response.data);
         } catch (err) {
           setError('Error fetching shop details');
@@ -64,7 +64,7 @@ const AddProduct = () => {
 
     try {
       const jwtToken = getCookie("jwt");
-      const response = await fetch("http://localhost:5000/api/products/create", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products/create`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${jwtToken}`,

@@ -160,7 +160,7 @@ const OrdersTable = () => {
     const fetchOrders = async () => {
       try {
         const jwtToken = getCookie("jwt");
-        const response = await fetch("http://localhost:5000/api/orders/allorders", {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/orders/allorders`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -188,7 +188,7 @@ const OrdersTable = () => {
   const handleDeleteOrder = async (orderId) => {
     try {
       const jwtToken = getCookie("jwt");
-      const response = await fetch(`http://localhost:5000/api/orders/deleteorders/${orderId}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/orders/deleteorders/${orderId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
