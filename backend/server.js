@@ -24,12 +24,14 @@ connectDB();
 const app = express();
 
 // Enable CORS
-app.use(cors(
-    {
-        origin: `${process.env.FRONT_END_URL}`,
-        credentials: true
-    },
-));
+app.use(cors({
+  origin: [
+      process.env.FRONT_END_URL, // Assuming this is set correctly in your .env file
+      "https://shiraa.vercel.app"
+  ],
+  credentials: true
+}));
+
 // Enable JSON parsing
 app.use (cookieParser());
 
